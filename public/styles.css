@@ -1,0 +1,229 @@
+/* styles.css */
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: Arial, sans-serif;
+  display: flex;
+  height: 100vh; /* 전체 화면 높이 */
+}
+
+
+/* 사이드바 스타일 */
+.sidebar {
+  width: 10%; /* 화면 너비의 10% */
+  background-color: #E6E6FA; /* 연한 보라색 */
+  height: 100vh; /* 전체 화면 높이 */
+  position: fixed; /* 고정 위치 */
+  left: 0;
+  top: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding-top: 20px; /* 상단 여백 */
+  padding-left: 10px;
+  padding-right: 10px;
+}
+
+/* 사이드바 제목 스타일 */
+.sidebar h2 {
+  margin-bottom: 20px;
+  text-align: center;
+}
+
+/* 로그인 폼 스타일 */
+.login_form {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  margin-bottom: 30px;
+}
+
+.login_form label {
+  margin-bottom: 5px;
+  font-weight: bold;
+  color: #4B0082;
+}
+
+.login_form input {
+  padding: 8px;
+  margin-bottom: 15px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+.login_form button {
+  padding: 10px;
+  background-color: #4B0082;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-weight: bold;
+  margin-bottom: 10px;
+}
+
+.login_form button:hover {
+  background-color: #6A5ACD; /* 호버 시 색상 변경 */
+}
+
+/* 통장쪼개기란? 항목 스타일 */
+.information {
+  width: 100%;
+}
+
+.information p {
+  padding: 10px;
+  background-color: #D8BFD8; /* 배경색 변경 */
+  margin-bottom: 10px;
+  border-radius: 4px;
+  cursor: pointer;
+  text-align: center;
+  transition: background-color 0.3s ease;
+}
+
+.information p:hover {
+  background-color: #BA55D3; /* 호버 시 색상 변경 */
+}
+
+/* 메인 콘텐츠 스타일 */
+.main {
+  margin-left: 10%; /* 사이드바 너비만큼 왼쪽 여백 */
+  display: flex; /* 가로로 나란히 배치 */
+  width: 90%; /* 나머지 화면 너비 */
+  height: 100vh; /* 전체 화면 높이 */
+  background-color: #f9f9f9;
+  overflow: hidden;
+}
+
+/* 전체 섹션 스타일 */
+.section {
+  flex: 1;
+  padding: 10px;
+  overflow-y: auto;
+  border-left: 1px solid #dcdcdc;
+}
+
+.section_header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.data_table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.data_table th,
+.data_table td {
+  padding: 5px;
+  text-align: center;
+}
+
+.data_table th {
+  font-weight: bold;
+  font-size: large;
+}
+
+.data_table tbody tr {
+  font-size: large; 
+}
+
+.data_table input {
+  font-size: large;
+  width: 150px;
+}
+
+.expand_button,
+.delete_button {
+  cursor: pointer;
+  border: none;
+  background: none;
+  font-size: large;
+}
+.detail_button,
+.add_button {
+  font-size: large;
+}
+
+/* 카테고리 구분선 스타일 */
+.category_row {
+  background-color: lavender; /* 파스텔톤 배경 */
+  height: 30px; /* 고정 높이 */
+}
+
+.category_label {
+  text-align: left !important; /* 왼쪽 정렬 */
+  font-weight: bold; /* 볼드 해제 */
+  font-size: medium; /* 글자 크기 중간 */
+  padding-left: 10px; /* 왼쪽 여백 */
+}
+
+
+
+/* 합계 표시 영역 */
+.total_container {
+  z-index: 999; /*모달보다 낮게 설정*/
+  bottom: 0; /* 하단에 고정 */
+  background-color: #f1f1f1; /* 배경색 추가 */
+  padding: 10px; /* 여백 */
+  text-align: right; /* 오른쪽 정렬 */
+  border-top: 1px solid #dcdcdc; /* 상단 경계선 */
+  font-size: large;
+  font-weight: bold;
+}
+
+/* 상세 창 */
+
+/* 모달 배경 */
+.modal {
+  display: none; /* 기본적으로 숨김 */
+  position: fixed;
+  z-index: 1000; /* 최상위로 표시 */
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.4); /* 반투명 배경 */
+  justify-content: center;
+  align-items: center;
+}
+
+/* 모달 내용 */
+.modal_content {
+  position: relative;
+  background-color: #fff;
+  width: 50%;
+  height: 80%;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+/* 모달 닫기 버튼 */
+.close_button {
+  position: absolute;
+  top: 10px;
+  right: 20px;
+  font-size: 24px;
+  color: #aaa;
+  cursor: pointer;
+}
+
+.close_button:hover {
+  color: #000;
+}
+
+/* 모달 내용 내부 프레임 */
+.modal_frame {
+  width: 100%;
+  height: 100%;
+  border: none;
+}
