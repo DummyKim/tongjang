@@ -37,7 +37,6 @@ body {
 
 /* 로그인 폼 스타일 */
 .login_form {
-  display: none !important;  /*기능 구현할 때 까지 안보이게 처리함 */
   width: 100%;
   display: flex;
   flex-direction: column;
