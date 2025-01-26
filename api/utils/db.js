@@ -1,13 +1,14 @@
 import mongoose from 'mongoose';
 
 const connectDB = async () => {
-    if (mongoose.connections[0].readyState) {
-        console.log('이미 연결된 데이터베이스');
-        return;
+    const uri = process.env.MONGO_URI; // 환경 변수에서 URI 가져오기
+
+    if (!uri) {
+        throw new Error('MONGO_URI 환경 변수가 설정되지 않았습니다.');
     }
 
     try {
-        await mongoose.connect(process.env.MONGO_URI, {
+        await mongoose.connect(uri, {
             useNewUrlParser: true,
             useUnifiedTopology: true,
         });
