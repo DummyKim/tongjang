@@ -13,13 +13,17 @@ export default async function handler(req, res) {
         try {
             await connectDB();
 
-            // 이메일 중복 확인
-            const existingUser = await User.findOne({ email });
+            // 중복 확인
+            const existingUser = await User.findOne({ $or: [{ username }, { email }] });
             if (existingUser) {
-                return res.status(400).json({ message: '이미 존재하는 이메일입니다.' });
+                return res.status(400).json({
+                    message: existingUser.username === username
+                        ? '이미 존재하는 사용자 이름입니다.'
+                        : '이미 존재하는 이메일입니다.',
+                });
             }
 
-            // 유저 생성
+            // 새 사용자 저장
             const newUser = new User({ username, email, password });
             await newUser.save();
 
