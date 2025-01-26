@@ -249,3 +249,13 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 });
+
+//회원가입 완료 후 모달창 닫기
+window.addEventListener('message', (event) => {
+    if (event.data.action === 'closeRegisterModal') {
+        const registerModal = document.getElementById('register_modal');
+        if (registerModal) {
+            registerModal.style.display = 'none';
+        }
+    }
+});
