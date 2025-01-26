@@ -9,13 +9,23 @@
 <body>
     <div class="sidebar">
         <h2>통장 쪼개기 Web</h2>
-        <form class="login_form">
-            <input type="email" id="email" name="email" placeholder="이메일" required>
-            <input type="password" id="password" name="password" placeholder="비밀번호" required>
-            <button type="submit">로그인</button>
-            <button id="register_button" type="button">회원가입</button>
-        </form>
-        
+        <div id="user_container">
+            <!-- 로그인 전 -->
+            <div id="login_before">
+                <form class="login_form">
+                    <input type="email" id="email" name="email" placeholder="이메일" required>
+                    <input type="password" id="password" name="password" placeholder="비밀번호" required>
+                    <button type="submit">로그인</button>
+                    <button id="register_button" type="button">회원가입</button>
+                </form>
+            </div>
+            
+            <!-- 로그인 후 -->
+            <div id="login_after" style="display: none;">
+                <p id="user_name"></p>
+                <button id="logout_button">로그아웃</button>
+            </div>
+        </div>
         <div class="information">
             <p id="info_button">통장 쪼개기란?</p>
         </div>

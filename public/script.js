@@ -283,16 +283,18 @@ document.querySelector('.login_form').addEventListener('submit', async (event) =
         if (response.ok) {
             alert('로그인 성공!');
             localStorage.setItem('token', result.token); // 토큰 저장
-            document.querySelector('.sidebar').style.display = 'none';
-            document.querySelector('.main').style.display = 'block'; // 메인 화면 표시
+            showLoggedInUI(result.username); // 로그인 후 UI 전환
         } else {
             alert(result.message || '로그인 실패');
+            showLoggedOutUI(); // 실패 시 로그인 전 UI 복구
         }
     } catch (error) {
         alert('서버와 연결할 수 없습니다.');
         console.error('로그인 오류:', error);
+        showLoggedOutUI(); // 에러 발생 시 UI 복구
     }
 });
+
 
 //로그인 JWT 검증 // 인증된 API 요청 예제
 async function fetchProtectedData() {
@@ -319,5 +321,22 @@ async function fetchProtectedData() {
     }
 }
 
-// 버튼 클릭 시 보호된 데이터 요청
-document.getElementById('protected-btn').addEventListener('click', fetchProtectedData);
+// 로그인 후 UI 전환
+function showLoggedInUI(username) {
+    document.getElementById('login_before').style.display = 'none'; // 로그인 전 UI 숨김
+    document.getElementById('login_after').style.display = 'block'; // 로그인 후 UI 표시
+    document.getElementById('user_name').textContent = `사용자명: ${username}`; // 사용자명 표시
+}
+
+// 로그인 전 UI 복구
+function showLoggedOutUI() {
+    document.getElementById('login_before').style.display = 'block'; // 로그인 전 UI 표시
+    document.getElementById('login_after').style.display = 'none'; // 로그인 후 UI 숨김
+}
+
+// 로그아웃 처리
+document.getElementById('logout_button').addEventListener('click', () => {
+    localStorage.removeItem('token'); // JWT 삭제
+    alert('로그아웃되었습니다.');
+    showLoggedOutUI(); // 로그인 전 UI로 전환
+});
