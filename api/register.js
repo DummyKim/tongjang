@@ -2,24 +2,6 @@ import 'dotenv/config';
 import connectDB from './utils/db.js';
 import User from './utils/UserModel.js';
 
-
-
-const connectDB = async () => {
-    const uri = process.env.MONGO_URI;
-    if (!uri) {
-        throw new Error('MONGO_URI 환경 변수가 설정되지 않았습니다.');
-    }
-
-    // MongoDB 연결
-    await mongoose.connect(uri, {
-        useNewUrlParser: true,
-        useUnifiedTopology: true,
-    });
-};
-
-
-
-
 export default async function handler(req, res) {
     if (req.method === 'POST') {
         const { username, email, password } = req.body;
