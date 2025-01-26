@@ -252,10 +252,12 @@ document.addEventListener('DOMContentLoaded', () => {
 
 //회원가입 완료 후 모달창 닫기
 window.addEventListener('message', (event) => {
+    console.log('수신된 메시지:', event.data); // 디버깅용 로그 추가
+
     if (event.data.action === 'closeRegisterModal') {
         const registerModal = document.getElementById('register_modal');
         if (registerModal) {
-            registerModal.style.display = 'none';
+            registerModal.style.display = 'none'; // 모달 닫기
         }
     }
 });
