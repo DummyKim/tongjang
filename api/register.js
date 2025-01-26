@@ -1,5 +1,6 @@
-import connectDB from './utils/db';
-import User from './utils/UserModel';
+import 'dotenv/config';
+import connectDB from './utils/db.js';
+import User from './utils/UserModel.js';
 
 export default async function handler(req, res) {
     if (req.method === 'POST') {
