@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>통장 쪼개기 웹사이트</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="sidebar">
+        <h2>통장 쪼개기 Web</h2>
+        <div id="user_container">
+            <!-- 로그인 전 -->
+            <div id="login_before">
+                <form class="login_form">
+                    <input type="email" id="email" name="email" placeholder="이메일" required>
+                    <input type="password" id="password" name="password" placeholder="비밀번호" required>
+                    <button type="submit">로그인</button>
+                    <button id="register_button" type="button">회원가입</button>
+                </form>
+            </div>
+            
+            <!-- 로그인 후 -->
+            <div id="login_after" style="display: none;">
+                <form class="login_form">
+                <p id="user_name"></p>
+                <br>
+                <button id="logout_button">로그아웃</button>
+                </form>
+            </div>
+        </div>
+        <div class="information">
+            <p id="info_button">통장 쪼개기란?</p>
+        </div>
+
+        <!-- 통장 쪼개기란? 모달 창 -->
+        <div id="info_modal" class="modal">
+        <div class="modal_content">
+            <iframe src="information.html" class="modal_frame"></iframe>
+            <span class="close_button">&times;</span>
+        </div>
+        </div>
+        
+    </div>
+    <div class="main">
+        <!-- 수입 섹션 -->
+        <div class="section" data-section="income">
+            <div class="section_header">
+                <h2>수입</h2>
+                <button class="add_button" data-section="income">추가</button>
+            </div>
+            <table class="data_table" id="table_income">
+                <thead>
+                    <tr>
+                        <th>항목</th>
+                        <th>금액</th>
+                        <th>상세</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- 기본 데이터 예시 -->
+                    <tr data-category="" data-memo="">
+                        <td><input type="text" name="income_item_1" placeholder="항목" class="item_input"></td>
+                        <td><input type="text" name="income_amount_1" placeholder="금액" class="amount_input"></td>
+                        <td><button class="detail_button">상세</button></td>
+                        <td><button class="delete_button">x</button></td>
+                    </tr>
+                </tbody>
+            </table>
+            <div class="total_container">
+                합계: <span class="total_amount" id="total_income">0</span> 원
+            </div>
+        </div>
+        <!-- 저축/투자 섹션 -->
+        <div class="section" data-section="investment">
+            <div class="section_header">
+                <h2>저축/투자</h2>
+                <button class="add_button" data-section="investment">추가</button>
+            </div>
+            <table class="data_table" id="table_investment">
+                <thead>
+                    <tr>
+                        <th>항목</th>
+                        <th>금액</th>
+                        <th>상세</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr data-category="" data-memo="">
+                        <td><input type="text" name="investment_item_1" placeholder="항목" class="item_input"></td>
+                        <td><input type="text" name="investment_amount_1" placeholder="금액" class="amount_input"></td>
+                        <td><button class="detail_button">상세</button></td>
+                        <td><button class="delete_button">x</button></td>
+                    </tr>
+                </tbody>
+            </table>
+            <div class="total_container">
+                합계: <span class="total_amount" id="total_investment">0</span> 원
+            </div>
+        </div>
+        <!-- 지출 섹션 -->
+        <div class="section" data-section="expense">
+            <div class="section_header">
+                <h2>지출</h2>
+                <button class="add_button" data-section="expense">추가</button>
+            </div>
+            <table class="data_table" id="table_expense">
+                <thead>
+                    <tr>
+                        <th>항목</th>
+                        <th>금액</th>
+                        <th>상세</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr data-category="" data-memo="">
+                        <td><input type="text" name="expense_item_1" placeholder="항목" class="item_input"></td>
+                        <td><input type="text" name="expense_amount_1" placeholder="금액" class="amount_input"></td>
+                        <td><button class="detail_button">상세</button></td>
+                        <td><button class="delete_button">x</button></td>
+                    </tr>
+                </tbody>
+            </table>
+            <div class="total_container">
+                합계: <span class="total_amount" id="total_expense">0</span> 원
+            </div>
+        </div>
+    </div>
+
+    <!-- 상세 모달 창 -->
+    <div id="detail_modal" class="modal">
+    <div class="modal_content">
+        <iframe src="detail/detail.html" class="modal_frame"></iframe>
+        <span class="close_button">&times;</span>
+    </div>
+    </div>
+
+    <!-- 회원가입 모달 창 -->
+    <div id="register_modal" class="modal">
+    <div class="modal_content">
+        <iframe src="signin/signin.html" class="modal_frame"></iframe>
+        <span class="close_button">&times;</span>
+    </div>
+    </div>
+      
+
+</div>
+    <script src="script.js"></script>
+</body>
+</html>

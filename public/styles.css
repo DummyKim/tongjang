@@ -35,6 +35,10 @@ body {
   text-align: center;
 }
 
+#user_container {
+  width: 100%; /* 또는 적절한 고정 값 예: 300px */
+}
+
 /* 로그인 폼 스타일 */
 .login_form {
   width: 100%;
