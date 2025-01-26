@@ -261,3 +261,63 @@ window.addEventListener('message', (event) => {
         }
     }
 });
+
+//로그인
+document.querySelector('.login_form').addEventListener('submit', async (event) => {
+    event.preventDefault(); // 폼 기본 동작 중지
+
+    const email = document.getElementById('email').value.trim();
+    const password = document.getElementById('password').value.trim();
+
+    try {
+        const response = await fetch('/api/login', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ email, password }),
+        });
+
+        const result = await response.json();
+
+        if (response.ok) {
+            alert('로그인 성공!');
+            localStorage.setItem('token', result.token); // 토큰 저장
+            document.querySelector('.sidebar').style.display = 'none';
+            document.querySelector('.main').style.display = 'block'; // 메인 화면 표시
+        } else {
+            alert(result.message || '로그인 실패');
+        }
+    } catch (error) {
+        alert('서버와 연결할 수 없습니다.');
+        console.error('로그인 오류:', error);
+    }
+});
+
+//로그인 JWT 검증 // 인증된 API 요청 예제
+async function fetchProtectedData() {
+    const token = localStorage.getItem('token'); // 로그인 시 저장된 토큰
+
+    try {
+        const response = await fetch('/api/protected', {
+            method: 'GET',
+            headers: {
+                'Authorization': `Bearer ${token}`, // Authorization 헤더에 토큰 추가
+            },
+        });
+
+        const result = await response.json();
+        if (response.ok) {
+            console.log('보호된 데이터:', result);
+            alert(`인증된 사용자: ${result.user.email}`);
+        } else {
+            alert(result.message || '인증 실패');
+        }
+    } catch (error) {
+        alert('서버와 연결할 수 없습니다.');
+        console.error('인증 요청 오류:', error);
+    }
+}
+
+// 버튼 클릭 시 보호된 데이터 요청
+document.getElementById('protected-btn').addEventListener('click', fetchProtectedData);

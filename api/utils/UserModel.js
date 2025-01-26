@@ -11,6 +11,10 @@ const UserSchema = new mongoose.Schema({
         type: String,
         required: true,
         unique: true,
+        match: [
+          /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
+          '유효한 이메일 형식을 입력하세요.',
+      ],
     },
     password: {
         type: String,
