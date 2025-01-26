@@ -115,15 +115,16 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    const modal = document.getElementById('detail_modal');
-    const modalFrame = modal.querySelector('.modal_frame');
-    const closeButton = modal.querySelector('.close_button');
+    const detailModal = document.getElementById('detail_modal');
+    const detailModalFrame = detailModal.querySelector('.modal_frame');
+    const detailCloseButton = detailModal.querySelector('.close_button');
     let currentRow = null; // 현재 선택된 행
 
     // 상세 버튼 클릭 이벤트
     document.addEventListener('click', (event) => {
         if (event.target.classList.contains('detail_button')) {
-            modal.style.display = 'flex';
+            detailModal.style.display = 'flex';
+            console.log('상세 모달 열기');
             currentRow = event.target.closest('tr'); // 현재 선택된 행 저장
 
             // 현재 행의 데이터를 상세창으로 전송
@@ -142,7 +143,7 @@ document.addEventListener('DOMContentLoaded', () => {
             });
 
             // 상세창으로 데이터 전송
-            modalFrame.contentWindow.postMessage({
+            detailModalFrame.contentWindow.postMessage({
                 section,
                 category,
                 item,
@@ -152,19 +153,13 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
-    // 모달 닫기 버튼
-    closeButton.addEventListener('click', () => {
-        modal.style.display = 'none';
+    // 상세 모달 닫기 버튼
+    detailCloseButton.addEventListener('click', () => {
+        detailModal.style.display = 'none';
+        console.log('상세 모달 닫기');
     });
 
-    // 모달 외부 클릭 시 닫기
-    window.addEventListener('click', (event) => {
-        if (event.target === modal) {
-            modal.style.display = 'none';
-        }
-    });
-
-    // 모달에서 데이터 수신
+    // 상세 모달에서 데이터 수신
     window.addEventListener('message', (event) => {
         const { section, category, item, amount, memo } = event.data;
 
@@ -195,7 +190,7 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         }
 
-        modal.style.display = 'none';
+        detailModal.style.display = 'none';
     });
 
     // 카테고리 생성 함수
@@ -209,28 +204,48 @@ document.addEventListener('DOMContentLoaded', () => {
             table.appendChild(categoryRow);
         }
     }
-});
 
-document.addEventListener('DOMContentLoaded', () => {
     const infoButton = document.getElementById('info_button');
     const infoModal = document.getElementById('info_modal');
-    const closeButton = infoModal.querySelector('.close_button');
-    
+    const infoCloseButton = infoModal.querySelector('.close_button');
 
-    // 모달 열기
+    // 인포 모달 열기
     infoButton.addEventListener('click', () => {
         infoModal.style.display = 'flex';
+        console.log('인포 모달 열기');
     });
 
-    // 모달 닫기 버튼
-    closeButton.addEventListener('click', () => {
+    // 인포 모달 닫기 버튼
+    infoCloseButton.addEventListener('click', () => {
         infoModal.style.display = 'none';
+        console.log('인포 모달 닫기');
     });
 
-    // 모달 외부 클릭 시 닫기
+    const registerButton = document.getElementById('register_button');
+    const registerModal = document.getElementById('register_modal');
+    const registerCloseButton = registerModal.querySelector('.close_button');
+
+    // 가입 모달 열기
+    registerButton.addEventListener('click', () => {
+        registerModal.style.display = 'flex';
+        console.log('가입 모달 열기');
+    });
+
+    // 가입 모달 닫기
+    registerCloseButton.addEventListener('click', () => {
+        registerModal.style.display = 'none';
+        console.log('가입 모달 닫기');
+    });
+
+    //모달 외부 클릭 시 모달 닫기
     window.addEventListener('click', (event) => {
-        if (event.target === infoModal) {
-            infoModal.style.display = 'none';
-        }
+        const modals = [detailModal, infoModal, registerModal];
+        
+        modals.forEach(modal => {
+            if (event.target === modal) {
+                modal.style.display = 'none';
+                console.log(`${modal.id} 모달 닫기`);
+            }
+        });
     });
 });
