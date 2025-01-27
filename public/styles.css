@@ -63,17 +63,9 @@ body {
 
 .login_form button {
   padding: 10px;
-  background-color: #4B0082;
-  color: white;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
   font-weight: bold;
+  cursor: pointer;
   margin-bottom: 10px;
-}
-
-.login_form button:hover {
-  background-color: #6A5ACD; /* 호버 시 색상 변경 */
 }
 
 /* 통장쪼개기란? 항목 스타일 */
@@ -83,17 +75,35 @@ body {
 
 .information p {
   padding: 10px;
-  background-color: #D8BFD8; /* 배경색 변경 */
+  background-color: #4B0082; /* 배경색 변경 */
   margin-bottom: 10px;
   border-radius: 4px;
   cursor: pointer;
   text-align: center;
+  color: white;
+  font-weight: bold;
   transition: background-color 0.3s ease;
 }
 
 .information p:hover {
-  background-color: #BA55D3; /* 호버 시 색상 변경 */
+  background-color: #6A5ACD; /* 호버 시 색상 변경 */
 }
+
+/* 저장불러오기 항목 스타일 */
+.saveload{
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+}
+
+.saveload button {
+  padding: 10px;
+  cursor: pointer;
+  font-weight: bold;
+  margin-bottom: 10px;
+}
+
 
 /* 메인 콘텐츠 스타일 */
 .main {

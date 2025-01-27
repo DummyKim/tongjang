@@ -340,3 +340,104 @@ document.getElementById('logout_button').addEventListener('click', () => {
     alert('로그아웃되었습니다.');
     showLoggedOutUI(); // 로그인 전 UI로 전환
 });
+
+
+// 로그인 여부 확인 함수
+function isLoggedIn() {
+    const token = localStorage.getItem('token');
+    return !!token;
+}
+
+// '저장' 버튼 클릭 이벤트
+document.getElementById('save_button').addEventListener('click', async () => {
+    if (!isLoggedIn()) {
+        alert('로그인 후 이용 가능합니다.');
+        return;
+    }
+
+    const token = localStorage.getItem('token');
+    const userId = 'USER_ID'; // 로그인 시 저장된 사용자 ID
+
+    // 프론트엔드의 데이터를 수집
+    const data = [];
+    document.querySelectorAll('.section').forEach((section) => {
+        const sectionName = section.dataset.section;
+        const rows = section.querySelectorAll('tbody tr:not(.category_row)');
+        rows.forEach((row) => {
+            const category = row.querySelector('.category_input').value || '없음';
+            const item = row.querySelector('.item_input').value;
+            const amount = parseFloat(row.querySelector('.amount_input').value) || 0;
+            const memo = row.querySelector('.memo_input')?.value || '';
+            data.push({ section: sectionName, category, item, amount, memo });
+        });
+    });
+
+    // API 요청
+    try {
+        const response = await fetch('/api/saveData', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`,
+            },
+            body: JSON.stringify({ userId, data }),
+        });
+
+        const result = await response.json();
+        if (response.ok) {
+            alert('데이터가 저장되었습니다.');
+        } else {
+            alert(result.message || '저장에 실패했습니다.');
+        }
+    } catch (error) {
+        alert('서버와 연결할 수 없습니다.');
+        console.error('저장 오류:', error);
+    }
+});
+
+// '불러오기' 버튼 클릭 이벤트
+document.getElementById('load_button').addEventListener('click', async () => {
+    if (!isLoggedIn()) {
+        alert('로그인 후 이용 가능합니다.');
+        return;
+    }
+
+    const token = localStorage.getItem('token');
+
+    // API 요청
+    try {
+        const response = await fetch('/api/loadData', {
+            method: 'GET',
+            headers: {
+                'Authorization': `Bearer ${token}`,
+            },
+        });
+
+        const result = await response.json();
+        if (response.ok) {
+            const data = result.data;
+            console.log('불러온 데이터:', data);
+
+            // 프론트엔드에 데이터 렌더링
+            data.forEach((item) => {
+                const section = document.querySelector(`.section[data-section="${item.section}"]`);
+                const table = section.querySelector('tbody');
+
+                const newRow = document.createElement('tr');
+                newRow.innerHTML = `
+                    <td><input type="text" value="${item.category}" class="category_input"></td>
+                    <td><input type="text" value="${item.item}" class="item_input"></td>
+                    <td><input type="number" value="${item.amount}" class="amount_input"></td>
+                    <td><input type="text" value="${item.memo}" class="memo_input"></td>
+                `;
+                table.appendChild(newRow);
+            });
+            alert('데이터가 불러와졌습니다.');
+        } else {
+            alert(result.message || '불러오기에 실패했습니다.');
+        }
+    } catch (error) {
+        alert('서버와 연결할 수 없습니다.');
+        console.error('불러오기 오류:', error);
+    }
+});
