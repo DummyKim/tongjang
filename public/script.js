@@ -361,67 +361,59 @@ document.getElementById('save_button').addEventListener('click', async () => {
         return;
     }
 
-    const token = localStorage.getItem('token');
-    const userId = 'USER_ID'; // 로그인 시 저장된 사용자 ID
-
-    // 프론트엔드의 데이터를 수집
     const data = [];
-    let validationError = false;
+    let validationError = false; // 초기화
 
-    document.querySelectorAll('.section').forEach((section) => {
-        const sectionName = section.dataset.section;
-        const rows = section.querySelectorAll('tbody tr:not(.category_row)');
+    rows.forEach((row) => {
+        const itemInput = row.querySelector('.item_input');
+        const amountInput = row.querySelector('.amount_input');
+        const categoryInput = row.querySelector('.category_input');
 
-        rows.forEach((row) => {
-            const itemInput = row.querySelector('.item_input');
-            console.log('현재 행:', row);
-            console.log('itemInput:', itemInput);
+        // itemInput이 없으면 건너뜀
+        if (!itemInput) {
+            console.warn('itemInput이 없는 행은 건너뜁니다:', row);
+            return;
+        }
 
-            // itemInput이 없는 경우: 건너뛰기
-            if (!itemInput) {
-                console.warn('itemInput이 없는 행은 건너뜁니다:', row);
-                return; // 건너뛰기
-            }
+        // itemInput 값이 비어 있는 경우 처리
+        if (itemInput.value.trim() === '') {
+            validationError = true;
+            itemInput.style.border = '2px solid red'; // 경고 표시
+            return;
+        } else {
+            itemInput.style.border = ''; // 경고 해제
+        }
 
-            // itemInput 값이 비어 있는 경우: 오류 처리
-            if (itemInput.value.trim() === '') {
-                validationError = true; // 오류 플래그 설정
-                itemInput.style.border = '2px solid red'; // 경고 표시
-                return;
-            } else {
-                itemInput.style.border = ''; // 경고 제거
-            }
+        // 데이터 추가
+        const category = categoryInput ? categoryInput.value : '없음';
+        const item = itemInput.value.trim();
+        const amount = parseFloat(amountInput?.value) || 0;
 
-            const categoryInput = row.querySelector('.category_input');
-            const amountInput = row.querySelector('.amount_input');
-
-            // 데이터 추가
-            const category = categoryInput ? categoryInput.value : '없음';
-            const item = itemInput.value.trim();
-            const amount = parseFloat(amountInput?.value) || 0;
-        
-            console.log('수집된 데이터:', { section: sectionName, category, item, amount });
-        
-            data.push({ section: sectionName, category, item, amount });
-
-        });
+        data.push({ section: 'income', category, item, amount });
     });
-
 
     if (validationError) {
         alert('항목 이름을 모두 입력하세요!');
         return;
     }
 
+    if (data.length === 0) {
+        alert('저장할 데이터가 없습니다.');
+        return;
+    }
+
+    console.log('수집된 데이터:', data);
+
     // API 요청
     try {
+        const token = localStorage.getItem('token');
         const response = await fetch('/api/saveData', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
                 'Authorization': `Bearer ${token}`,
             },
-            body: JSON.stringify({ userId, data }),
+            body: JSON.stringify({ userId: 'USER_ID', data }),
         });
 
         const result = await response.json();
@@ -431,10 +423,11 @@ document.getElementById('save_button').addEventListener('click', async () => {
             alert(result.message || '저장에 실패했습니다.');
         }
     } catch (error) {
-        alert('서버와 연결할 수 없습니다.');
         console.error('저장 오류:', error);
+        alert('서버와 연결할 수 없습니다.');
     }
 });
+
 
 // '불러오기' 버튼 클릭 이벤트
 document.getElementById('load_button').addEventListener('click', async () => {
