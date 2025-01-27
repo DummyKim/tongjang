@@ -389,14 +389,13 @@ document.getElementById('save_button').addEventListener('click', async () => {
             itemInput.style.border = ''; // 경고 해제
         }
 
-        // 데이터 추가
-        const section = sectionInput
-        const category = categoryInput ? categoryInput.value : '없음';
-        const item = itemInput.value.trim();
-        const amount = parseFloat(amountInput?.value) || 0;
-        const memo = memoInput
-
-        data.push({ section, category, item, amount, memo });
+        data.push({ 
+            section: sectionInput ? sectionInput.value : 'income',
+            category: categoryInput ? categoryInput.value : '없음',
+            item: itemInput.value.trim(),
+            amount: parseFloat(amountInput?.value) || 0,
+            memo: memoInput ? memoInput.value : '',
+         });
     });
 
     if (validationError) {
