@@ -364,7 +364,10 @@ document.getElementById('save_button').addEventListener('click', async () => {
         const sectionName = section.dataset.section;
         const rows = section.querySelectorAll('tbody tr:not(.category_row)');
         rows.forEach((row) => {
-            const category = row.querySelector('.category_input').value || '없음';
+            const categoryInput = row.querySelector('.category_input'); // 요소 찾기
+            console.log('카테고리 필드:', categoryInput); // null 여부 확인
+            const category = categoryInput ? categoryInput.value : '없음'; // null 체크
+            console.log('카테고리 값:', category); // 값 확인
             const item = row.querySelector('.item_input').value;
             const amount = parseFloat(row.querySelector('.amount_input').value) || 0;
             const memo = row.querySelector('.memo_input')?.value || '';
