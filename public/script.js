@@ -103,7 +103,7 @@ document.addEventListener('DOMContentLoaded', () => {
             // 포커스 아웃 시 천 단위 콤마 추가
             const rawValue = input.value.replace(/,/g, '');
             if (!isNaN(rawValue) && rawValue !== '') {
-                input.value = parseFloat(rawValue).toLocaleString();
+                input.value = Number(rawValue).toLocaleString(); // 숫자를 천 단위 콤마로 변환
             }
         });
 
@@ -409,11 +409,16 @@ document.getElementById('save_button').addEventListener('click', async () => {
             itemInput.style.border = ''; // 경고 해제
         }
 
+        // 금액 필드에서 콤마 제거 및 숫자로 변환
+        let rawAmount = amountInput?.value || '0';
+        rawAmount = rawAmount.replace(/,/g, ''); // 콤마 제거
+        const amount = parseFloat(rawAmount) || 0;
+
         data.push({ 
             section: sectionInput.value.trim(),
             category: categoryInput.value.trim(),
             item: itemInput.value.trim(),
-            amount: parseFloat(amountInput?.value.replace(/,/g, '')) || 0, // 콤마 제거 후 처리
+            amount: amount,
             memo: memoInput.value.trim(),
          });
          console.log('수집된 데이터:', data);
