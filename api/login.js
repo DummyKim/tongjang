@@ -33,7 +33,13 @@ export default async function handler(req, res) {
                 { expiresIn: '1h' }
             );
 
-            res.status(200).json({ message: '로그인 성공', token });
+            res.status(200).json({
+              message: '로그인 성공',
+              token,
+              username: user.username, // 사용자명 추가
+            });
+            console.log('로그인된 사용자명:', user.username);
+
         } catch (error) {
             console.error('로그인 오류:', error.message);
             res.status(500).json({ message: '서버 오류가 발생했습니다.' });
