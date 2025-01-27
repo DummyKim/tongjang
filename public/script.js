@@ -366,6 +366,8 @@ document.getElementById('save_button').addEventListener('click', async () => {
 
     // 프론트엔드의 데이터를 수집
     const data = [];
+    let validationError = false;
+
     document.querySelectorAll('.section').forEach((section) => {
         const sectionName = section.dataset.section;
         const rows = section.querySelectorAll('tbody tr:not(.category_row)');
@@ -373,14 +375,15 @@ document.getElementById('save_button').addEventListener('click', async () => {
             const itemInput = row.querySelector('.item_input');
             console.log('현재 행:', row);
             console.log('itemInput:', itemInput);
-            
-            if (!itemInput) {
-                console.warn('itemInput이 없는 행은 건너뜁니다:', row);
-                return; // 이 행을 건너뜀
-            }
 
-            console.log('현재 행:', row);
-            console.log('itemInput:', itemInput);
+            if (!itemInput || itemInput.value.trim() === '') {
+                console.warn('itemInput이 없는 행은 건너뜁니다:', row);
+                validationError = true; // 오류 플래그 설정
+                if (itemInput) {
+                    itemInput.style.border = '2px solid red'; // 경고 표시
+                }
+                return; // 건너뛰기
+            }
 
             const categoryInput = row.querySelector('.category_input');
             const amountInput = row.querySelector('.amount_input');
@@ -393,16 +396,6 @@ document.getElementById('save_button').addEventListener('click', async () => {
             console.log('수집된 데이터:', { section: sectionName, category, item, amount });
         
             data.push({ section: sectionName, category, item, amount });
-
-
-            // API 호출 전 데이터 확인
-            console.log('수집된 데이터:', data);
-            if (data.length === 0) {
-            alert('저장할 데이터가 없습니다.');
-            return;
-            }
-
-
 
         });
     });
