@@ -371,18 +371,25 @@ document.getElementById('save_button').addEventListener('click', async () => {
     document.querySelectorAll('.section').forEach((section) => {
         const sectionName = section.dataset.section;
         const rows = section.querySelectorAll('tbody tr:not(.category_row)');
+
         rows.forEach((row) => {
             const itemInput = row.querySelector('.item_input');
             console.log('현재 행:', row);
             console.log('itemInput:', itemInput);
 
-            if (!itemInput || itemInput.value.trim() === '') {
+            // itemInput이 없는 경우: 건너뛰기
+            if (!itemInput) {
                 console.warn('itemInput이 없는 행은 건너뜁니다:', row);
-                validationError = true; // 오류 플래그 설정
-                if (itemInput) {
-                    itemInput.style.border = '2px solid red'; // 경고 표시
-                }
                 return; // 건너뛰기
+            }
+
+            // itemInput 값이 비어 있는 경우: 오류 처리
+            if (itemInput.value.trim() === '') {
+                validationError = true; // 오류 플래그 설정
+                itemInput.style.border = '2px solid red'; // 경고 표시
+                return;
+            } else {
+                itemInput.style.border = ''; // 경고 제거
             }
 
             const categoryInput = row.querySelector('.category_input');
