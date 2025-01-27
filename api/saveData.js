@@ -6,12 +6,12 @@ export default async function handler(req, res) {
     if (req.method === 'POST') {
         try {
             authenticateToken(req, res, async () => {
-                const { userId, data } = req.body;
+                const { data } = req.body;
+                const userId = req.user.userId; // JWT에서 추출
 
                 if (!userId || !data || !Array.isArray(data)) {
                     return res.status(400).json({ message: '필수 데이터가 누락되었습니다.' });
                 }
-
 
                 const invalidData = data.filter((item) => !item.item || item.item.trim() === '');
                 if (invalidData.length > 0) {
