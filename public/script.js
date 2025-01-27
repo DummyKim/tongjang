@@ -373,22 +373,41 @@ document.getElementById('save_button').addEventListener('click', async () => {
             const itemInput = row.querySelector('.item_input');
             const amountInput = row.querySelector('.amount_input');
             const categoryInput = row.querySelector('.category_input');
+        
+            console.log('현재 행:', row);
+            console.log('itemInput:', itemInput);
 
             // 빈 데이터 검증
             if (!itemInput || itemInput.value.trim() === '') {
+                console.warn('itemInput이 비어 있습니다:', itemInput);
                 validationError = true;
-                itemInput.style.border = '2px solid red'; // 경고 표시
+        
+                if (itemInput) {
+                    itemInput.style.border = '2px solid red';
+                }
+        
                 return;
             }
-            
+        
             // 데이터 추가
-            data.push({
-                section: sectionName,
-                category: categoryInput ? categoryInput.value : '없음',
-                item: itemInput.value,
-                amount: parseFloat(amountInput.value) || 0,
-                memo: row.querySelector('.memo_input')?.value || '',
-            });
+            const category = categoryInput ? categoryInput.value : '없음';
+            const item = itemInput.value.trim();
+            const amount = parseFloat(amountInput?.value) || 0;
+        
+            console.log('수집된 데이터:', { section: sectionName, category, item, amount });
+        
+            data.push({ section: sectionName, category, item, amount });
+
+
+            // API 호출 전 데이터 확인
+            console.log('수집된 데이터:', data);
+            if (data.length === 0) {
+            alert('저장할 데이터가 없습니다.');
+            return;
+            }
+
+
+
         });
     });
 
