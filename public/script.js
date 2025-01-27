@@ -371,24 +371,20 @@ document.getElementById('save_button').addEventListener('click', async () => {
         const rows = section.querySelectorAll('tbody tr:not(.category_row)');
         rows.forEach((row) => {
             const itemInput = row.querySelector('.item_input');
-            const amountInput = row.querySelector('.amount_input');
-            const categoryInput = row.querySelector('.category_input');
-        
+            console.log('현재 행:', row);
+            console.log('itemInput:', itemInput);
+            
+            if (!itemInput) {
+                console.warn('itemInput이 없는 행은 건너뜁니다:', row);
+                return; // 이 행을 건너뜀
+            }
+
             console.log('현재 행:', row);
             console.log('itemInput:', itemInput);
 
-            // 빈 데이터 검증
-            if (!itemInput || itemInput.value.trim() === '') {
-                console.warn('itemInput이 비어 있습니다:', itemInput);
-                validationError = true;
-        
-                if (itemInput) {
-                    itemInput.style.border = '2px solid red';
-                }
-        
-                return;
-            }
-        
+            const categoryInput = row.querySelector('.category_input');
+            const amountInput = row.querySelector('.amount_input');
+
             // 데이터 추가
             const category = categoryInput ? categoryInput.value : '없음';
             const item = itemInput.value.trim();
