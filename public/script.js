@@ -368,9 +368,11 @@ document.getElementById('save_button').addEventListener('click', async () => {
     let validationError = false; // 초기화
 
     rows.forEach((row) => {
+        const sectionInput = row.querySelector('.section_input');
+        const categoryInput = row.querySelector('.category_input');
         const itemInput = row.querySelector('.item_input');
         const amountInput = row.querySelector('.amount_input');
-        const categoryInput = row.querySelector('.category_input');
+        const memoInput = row.querySelector('.memo_input');
 
         // itemInput이 없으면 건너뜀
         if (!itemInput) {
@@ -388,11 +390,13 @@ document.getElementById('save_button').addEventListener('click', async () => {
         }
 
         // 데이터 추가
+        const section = sectionInput
         const category = categoryInput ? categoryInput.value : '없음';
         const item = itemInput.value.trim();
         const amount = parseFloat(amountInput?.value) || 0;
+        const memo = memoInput
 
-        data.push({ section: 'income', category, item, amount });
+        data.push({ section, category, item, amount, memo });
     });
 
     if (validationError) {
