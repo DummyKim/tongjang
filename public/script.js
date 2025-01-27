@@ -126,11 +126,11 @@ document.addEventListener('DOMContentLoaded', () => {
             currentRow = event.target.closest('tr'); // 현재 선택된 행 저장
 
             // 현재 행의 데이터를 상세창으로 전송
-            const section = currentRow.closest('.section').dataset.section;
-            const category = currentRow.dataset.category || '';
-            const memo = currentRow.dataset.memo || '';
+            const section = currentRow.querySelector('.section_input').value || '';
+            const category = currentRow.querySelector('.category_input').value || '';
             const item = currentRow.querySelector('.item_input').value || '';
             const amount = currentRow.querySelector('.amount_input').value || '';
+            const memo = currentRow.querySelector('.memo_input').value || '';
 
             console.log('부모 페이지에서 상세창으로 전송하는 데이터:', {
                 section,
@@ -165,14 +165,37 @@ document.addEventListener('DOMContentLoaded', () => {
 
         if (currentRow) {
             const table = document.getElementById(`table_${section}`).querySelector('tbody');
+            const oldSection = currentRow.querySelector('.section_input').value;
             const oldCategory = currentRow.dataset.category;
 
             // 현재 행 업데이트
-            currentRow.dataset.category = category || '';
-            currentRow.dataset.memo = memo || '';
+            currentRow.querySelector('.section_input').value = section || '';
+            currentRow.querySelector('.category_input').value = category || '';
             currentRow.querySelector('.item_input').value = item || '';
             currentRow.querySelector('.amount_input').value = amount || '';
+            currentRow.querySelector('.memo_input').value = memo || '';
 
+
+        // 섹션이 변경된 경우 새로운 섹션으로 이동
+        if (oldSection !== section) {
+            const oldTable = document.getElementById(`table_${oldSection}`).querySelector('tbody');
+            const newTable = document.getElementById(`table_${section}`).querySelector('tbody');
+
+            // 기존 섹션에서 행 제거 및 새로운 섹션에 추가
+            oldTable.removeChild(currentRow);
+            newTable.appendChild(currentRow);
+
+            // 기존 섹션 합계 업데이트
+            updateTotal(oldSection);
+
+            // 새로운 섹션 합계 업데이트
+            updateTotal(section);
+        } else {
+            // 섹션 변경이 없을 경우 기존 섹션의 합계만 업데이트
+            updateTotal(section);
+        }
+
+            
             // 카테고리 변경 시 항목 재배치
             if (oldCategory !== category) {
                 createCategoryIfNotExists(table, category);
