@@ -438,7 +438,6 @@ document.getElementById('load_button').addEventListener('click', async () => {
 
     const token = localStorage.getItem('token');
 
-    // API 요청
     try {
         const response = await fetch('/api/loadData', {
             method: 'GET',
@@ -448,30 +447,50 @@ document.getElementById('load_button').addEventListener('click', async () => {
         });
 
         const result = await response.json();
+
         if (response.ok) {
             const data = result.data;
             console.log('불러온 데이터:', data);
 
-            // 프론트엔드에 데이터 렌더링
-            data.forEach((item) => {
+            // 테이블 초기화
+            document.querySelectorAll('.section tbody').forEach((tbody) => {
+                tbody.innerHTML = ''; // 기존 데이터 삭제
+            });
+
+            // 데이터 렌더링
+            data.forEach((item, index) => {
                 const section = document.querySelector(`.section[data-section="${item.section}"]`);
+                if (!section) {
+                    console.warn('잘못된 섹션:', item.section);
+                    return;
+                }
+
                 const table = section.querySelector('tbody');
 
+                // 새 행 추가
                 const newRow = document.createElement('tr');
+                newRow.setAttribute('data-category', item.category || '없음');
                 newRow.innerHTML = `
-                    <td><input type="text" value="${item.category}" class="category_input"></td>
-                    <td><input type="text" value="${item.item}" class="item_input"></td>
-                    <td><input type="number" value="${item.amount}" class="amount_input"></td>
-                    <td><input type="text" value="${item.memo}" class="memo_input"></td>
+                    <td><input type="text" name="${item.section}_item_${index + 1}" placeholder="항목" value="${item.item || '항목 없음'}" class="item_input"></td>
+                    <td><input type="text" name="${item.section}_amount_${index + 1}" placeholder="금액" value="${item.amount || 0}" class="amount_input"></td>
+                    <td><button class="detail_button">상세</button></td>
+                    <td><button class="delete_button">x</button></td>
                 `;
+
                 table.appendChild(newRow);
+
+                // 새로 추가된 금액 필드에 입력 이벤트 리스너 추가
+                const amountInput = newRow.querySelector('.amount_input');
+                addCommaHandlers(amountInput, item.section);
             });
+
             alert('데이터가 불러와졌습니다.');
         } else {
             alert(result.message || '불러오기에 실패했습니다.');
         }
     } catch (error) {
-        alert('서버와 연결할 수 없습니다.');
         console.error('불러오기 오류:', error);
+        alert('서버와 연결할 수 없습니다.');
     }
 });
+
