@@ -160,48 +160,49 @@ document.addEventListener('DOMContentLoaded', () => {
     // 상세 모달에서 데이터 수신
     window.addEventListener('message', (event) => {
         const { section, category, item, amount, memo } = event.data;
-
-        console.log('부모 페이지에서 수신한 데이터:', event.data);
-
+    
         if (currentRow) {
-            const table = document.getElementById(`table_${section}`).querySelector('tbody');
             const oldSection = currentRow.querySelector('.section_input').value;
-            const oldCategory = currentRow.dataset.category;
-
+            const oldCategory = currentRow.querySelector('.category_input').value;
+    
             // 현재 행 업데이트
             currentRow.querySelector('.section_input').value = section || '';
             currentRow.querySelector('.category_input').value = category || '';
             currentRow.querySelector('.item_input').value = item || '';
             currentRow.querySelector('.amount_input').value = amount || '';
             currentRow.querySelector('.memo_input').value = memo || '';
-
-
-        // 섹션이 변경된 경우 새로운 섹션으로 이동
-        if (oldSection !== section) {
-            const oldTable = document.getElementById(`table_${oldSection}`).querySelector('tbody');
-            const newTable = document.getElementById(`table_${section}`).querySelector('tbody');
-
-            // 기존 섹션에서 행 제거 및 새로운 섹션에 추가
-            oldTable.removeChild(currentRow);
-            newTable.appendChild(currentRow);
-
-            // 기존 섹션 합계 업데이트
-            updateTotal(oldSection);
-
-            // 새로운 섹션 합계 업데이트
-            updateTotal(section);
-        } else {
-            // 섹션 변경이 없을 경우 기존 섹션의 합계만 업데이트
-            updateTotal(section);
-        }
-
-            
+    
+            // 섹션이 변경된 경우
+            if (oldSection !== section) {
+                const oldTable = document.getElementById(`table_${oldSection}`).querySelector('tbody');
+                const newTable = document.getElementById(`table_${section}`).querySelector('tbody');
+    
+                // 기존 섹션에서 행 제거 및 새로운 섹션에 추가
+                oldTable.removeChild(currentRow);
+                newTable.appendChild(currentRow);
+    
+                // 기존 섹션 합계 업데이트
+                updateTotal(oldSection);
+    
+                // 새로운 섹션 합계 업데이트
+                updateTotal(section);
+    
+                // 금액 입력 필드 이벤트 리스너 재등록 (새로운 섹션에 맞게)
+                const amountInput = currentRow.querySelector('.amount_input');
+                addCommaHandlers(amountInput, section);
+            } else {
+                // 섹션 변경이 없을 경우 기존 섹션의 합계만 업데이트
+                updateTotal(section);
+            }
+    
             // 카테고리 변경 시 항목 재배치
             if (oldCategory !== category) {
+                const table = document.getElementById(`table_${section}`).querySelector('tbody');
                 createCategoryIfNotExists(table, category);
+    
                 const newCategoryRow = table.querySelector(`tr.category_row[data-category="${category}"]`);
                 table.insertBefore(currentRow, newCategoryRow.nextSibling);
-
+    
                 // 이전 카테고리 정리
                 const remainingItems = table.querySelectorAll(`tr[data-category="${oldCategory}"]:not(.category_row)`);
                 if (remainingItems.length === 0 && oldCategory !== '없음') {
@@ -210,9 +211,10 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
             }
         }
-
+    
         detailModal.style.display = 'none';
     });
+    
 
     // 카테고리 생성 함수
     function createCategoryIfNotExists(table, category) {
