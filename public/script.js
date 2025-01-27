@@ -16,32 +16,27 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 
+    // 새 항목 추가 로직 수정
     addButtons.forEach((button) => {
         button.addEventListener('click', () => {
             const section = button.dataset.section;
             const table = document.getElementById(`table_${section}`).querySelector('tbody');
             const rowCount = table.querySelectorAll('tr').length + 1;
 
-            // 새 항목 데이터
-            const category = '없음'; // 기본 카테고리
-            createCategoryIfNotExists(table, category);
-
             // 새 항목 추가
             const newRow = document.createElement('tr');
-            newRow.setAttribute('data-category', category);
             newRow.innerHTML = `
-                        <td style="display: none;"><input type="text" value="${section}" class="section_input"></td>
-                        <td style="display: none;"><input type="text" value="없음" class="category_input"></td>
+                <td style="display: none;"><input type="text" value="${section}" class="section_input"></td>
+                <td style="display: none;"><input type="text" value="없음" class="category_input"></td>
                 <td><input type="text" name="${section}_item_${rowCount}" placeholder="항목" value="새 항목" class="item_input"></td>
                 <td><input type="text" name="${section}_amount_${rowCount}" placeholder="금액" value="0" class="amount_input"></td>
-                        <td style="display: none;"><input type="text" value="" class="memo_input"></td>
+                <td style="display: none;"><input type="text" value="" class="memo_input"></td>
                 <td><button class="detail_button">상세</button></td>
                 <td><button class="delete_button">x</button></td>
             `;
-            const categoryRow = table.querySelector(`tr.category_row[data-category="${category}"]`);
-            table.insertBefore(newRow, categoryRow.nextSibling);
+            table.appendChild(newRow);
 
-            // 새로 추가된 금액 필드에 입력 이벤트 리스너 추가
+            // 새로 추가된 금액 필드에 이벤트 리스너 추가
             const amountInput = newRow.querySelector('.amount_input');
             addCommaHandlers(amountInput, section);
         });
@@ -390,11 +385,11 @@ document.getElementById('save_button').addEventListener('click', async () => {
         }
 
         data.push({ 
-            section: sectionInput ? sectionInput.value : 'income',
-            category: categoryInput ? categoryInput.value : '없음',
+            section: sectionInput.value.trim(),
+            category: categoryInput.value.trim(),
             item: itemInput.value.trim(),
             amount: parseFloat(amountInput?.value) || 0,
-            memo: memoInput ? memoInput.value : '',
+            memo: memoInput.value.trim(),
          });
     });
 
@@ -499,4 +494,3 @@ document.getElementById('load_button').addEventListener('click', async () => {
         alert('서버와 연결할 수 없습니다.');
     }
 });
-

@@ -151,22 +151,22 @@ document.addEventListener('DOMContentLoaded', () => {
       alert(`"${selectedCategory}" 카테고리가 삭제되었습니다.`);
   });
 
-  // 부모 페이지로 데이터 전송
-  saveButton.addEventListener('click', () => {
-      const section = sectionSelect.value.trim();
-      const category = categoryDropdown.value.trim();
-      const item = document.getElementById('item_input').value.trim();
-      const amount = document.getElementById('amount_input').value.trim();
-      const memo = document.getElementById('memo_input').value.trim();
+    // 부모 페이지로 데이터 전송
+    saveButton.addEventListener('click', () => {
+        const section = sectionSelect.value.trim();
+        const category = categoryDropdown.value.trim();
+        const item = document.getElementById('item_input').value.trim();
+        const amount = document.getElementById('amount_input').value.trim();
+        const memo = document.getElementById('memo_input').value.trim();
 
-      console.log('상세창에서 전송하는 데이터:', { section, category, item, amount, memo });
+        console.log('상세창에서 전송하는 데이터:', { section, category, item, amount, memo });
 
-      window.parent.postMessage({
-          section,
-          category,
-          item,
-          amount,
-          memo
-      }, '*');
-  });
+        window.parent.postMessage({
+            section,
+            category,
+            item,
+            amount,
+            memo,
+        }, '*');
+    });
 });
