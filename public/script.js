@@ -413,7 +413,7 @@ document.getElementById('save_button').addEventListener('click', async () => {
                 'Content-Type': 'application/json',
                 'Authorization': `Bearer ${token}`,
             },
-            body: JSON.stringify({ userId: 'USER_ID', data }),
+            body: JSON.stringify({ data }),
         });
 
         const result = await response.json();
