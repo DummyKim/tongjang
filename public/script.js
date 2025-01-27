@@ -325,8 +325,7 @@ async function fetchProtectedData() {
 function showLoggedInUI(username) {
     document.getElementById('login_before').style.display = 'none'; // 로그인 전 UI 숨김
     document.getElementById('login_after').style.display = 'block'; // 로그인 후 UI 표시
-    document.getElementById('user_name').textContent = `사용자명: 
-    ${username}`; // 사용자명 표시
+    document.getElementById('user_name').textContent = `사용자명: \n ${username}`; // 사용자명 표시
 }
 
 // 로그인 전 UI 복구
