@@ -355,6 +355,12 @@ document.getElementById('save_button').addEventListener('click', async () => {
         return;
     }
 
+    const rows = document.querySelectorAll('.section tbody tr:not(.category_row)');
+    if (rows.length === 0) {
+        alert('저장할 항목이 없습니다. 먼저 항목을 추가하세요.');
+        return;
+    }
+
     const token = localStorage.getItem('token');
     const userId = 'USER_ID'; // 로그인 시 저장된 사용자 ID
 
@@ -371,9 +377,32 @@ document.getElementById('save_button').addEventListener('click', async () => {
             const item = row.querySelector('.item_input').value;
             const amount = parseFloat(row.querySelector('.amount_input').value) || 0;
             const memo = row.querySelector('.memo_input')?.value || '';
-            data.push({ section: sectionName, category, item, amount, memo });
+
+
+            // 빈 데이터 검증
+            if (!itemInput || itemInput.value.trim() === '') {
+                validationError = true;
+                itemInput.style.border = '2px solid red'; // 경고 표시
+                return;
+            }
+            
+
+            // 데이터 추가
+            data.push({
+                section: sectionName,
+                category: categoryInput ? categoryInput.value : '없음',
+                item: itemInput.value,
+                amount: parseFloat(amountInput.value) || 0,
+                memo: row.querySelector('.memo_input')?.value || '',
+            });
         });
     });
+
+
+    if (validationError) {
+        alert('항목 이름을 모두 입력하세요!');
+        return;
+    }
 
     // API 요청
     try {
