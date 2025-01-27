@@ -413,9 +413,11 @@ document.getElementById('save_button').addEventListener('click', async () => {
             section: sectionInput.value.trim(),
             category: categoryInput.value.trim(),
             item: itemInput.value.trim(),
-            amount: parseFloat(amountInput?.value) || 0,
+            amount: parseFloat(amountInput?.value.replace(/,/g, '')) || 0, // 콤마 제거 후 처리
             memo: memoInput.value.trim(),
          });
+         console.log('수집된 데이터:', data);
+
     });
 
     if (validationError) {
