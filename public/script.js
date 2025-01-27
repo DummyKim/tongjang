@@ -30,8 +30,11 @@ document.addEventListener('DOMContentLoaded', () => {
             const newRow = document.createElement('tr');
             newRow.setAttribute('data-category', category);
             newRow.innerHTML = `
+                        <td style="display: none;"><input type="text" value="${section}" class="section_input"></td>
+                        <td style="display: none;"><input type="text" value="없음" class="category_input"></td>
                 <td><input type="text" name="${section}_item_${rowCount}" placeholder="항목" value="새 항목" class="item_input"></td>
                 <td><input type="text" name="${section}_amount_${rowCount}" placeholder="금액" value="0" class="amount_input"></td>
+                        <td style="display: none;"><input type="text" value="" class="memo_input"></td>
                 <td><button class="detail_button">상세</button></td>
                 <td><button class="delete_button">x</button></td>
             `;
