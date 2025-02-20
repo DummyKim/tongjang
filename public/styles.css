@@ -44,6 +44,12 @@ input {
   font-size: large;
 }
 
+#login_after {
+  display: flex; /* 내부 요소 가로 정렬 */
+  align-items: center; /* 수직 중앙 정렬 */
+  gap: 10px; /* 요소 간 간격 */
+}
+
 /* 섹션 스타일 */
 .section {
   flex: 1;
