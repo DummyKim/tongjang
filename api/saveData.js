@@ -13,9 +13,9 @@ export default async function handler(req, res) {
                     return res.status(400).json({ message: '필수 데이터가 누락되었습니다.' });
                 }
 
-                const invalidData = data.filter((item) => !item.item || item.item.trim() === '');
+                const invalidData = data.filter((item) => !item.name || item.name.trim() === '');
                 if (invalidData.length > 0) {
-                    return res.status(400).json({ message: '항목 이름(item)은 필수입니다.' });
+                    return res.status(400).json({ message: '항목 이름(name)은 필수입니다.' });
                 }
 
                 await connectDB();
