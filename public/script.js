@@ -1,239 +1,277 @@
-// 객체 배열 및 ID 카운터 초기화
-let data = [];
-let entryIdCounter = 1; // 자동 증가 ID
+document.addEventListener('DOMContentLoaded', () => {
+    const addButtons = document.querySelectorAll('.add_button');
 
-// Entry 객체 정의
-function Entry(entryId, section, category, name, amount, memo) {
-    this.entryId = entryId;
-    this.section = section;
-    this.category = category;
-    this.name = name;
-    this.amount = amount;
-    this.memo = memo;
-}
+    // 초기화: '없음' 카테고리 구분선 생성 및 기본 항목 분류
+    const sections = document.querySelectorAll('.section');
+    sections.forEach((section) => {
+        const table = section.querySelector('tbody');
+        createCategoryIfNotExists(table, '없음');
+        const rows = Array.from(table.querySelectorAll('tr:not(.category_row)'));
 
-// 새 항목 추가 기능
-document.addEventListener("DOMContentLoaded", () => {
-    document.querySelectorAll(".add_button").forEach(button => {
-        button.addEventListener("click", () => {
+        rows.forEach((row) => {
+            const category = row.dataset.category || '없음';
+            row.setAttribute('data-category', category);
+            const categoryRow = table.querySelector(`tr.category_row[data-category="${category}"]`);
+            table.insertBefore(row, categoryRow.nextSibling);
+        });
+    });
+
+    // 새 항목 추가 로직 수정
+    addButtons.forEach((button) => {
+        button.addEventListener('click', () => {
             const section = button.dataset.section;
-            const newEntry = new Entry(entryIdCounter++, section, "없음", "새 항목", 0, "");
+            const table = document.getElementById(`table_${section}`).querySelector('tbody');
+            const rowCount = table.querySelectorAll('tr').length + 1;
 
-            data.push(newEntry);
-            console.log(`새로운 항목 추가됨:`, newEntry);
-            renderTable(); // UI 업데이트
-        });
-    });
-});
+            // 새 항목 추가
+            const newRow = document.createElement('tr');
+            newRow.innerHTML = `
+                <td style="display: none;"><input type="text" value="${section}" class="section_input"></td>
+                <td style="display: none;"><input type="text" value="없음" class="category_input"></td>
+                <td><input type="text" name="${section}_item_${rowCount}" placeholder="항목" value="새 항목" class="item_input"></td>
+                <td><input type="text" name="${section}_amount_${rowCount}" placeholder="금액" value="0" class="amount_input"></td>
+                <td style="display: none;"><input type="text" value="" class="memo_input"></td>
+                <td><button class="detail_button">상세</button></td>
+                <td><button class="delete_button">x</button></td>
+            `;
+            table.appendChild(newRow);
 
-// 테이블을 렌더링하는 함수 (카테고리별 정렬 + 합계 계산)
-function renderTable() {
-    document.querySelectorAll('.section tbody').forEach(tbody => tbody.innerHTML = ""); // 기존 테이블 초기화
-
-    // 섹션별 데이터 그룹화
-    const sectionGroups = {
-        income: {},
-        investment: {},
-        expense: {}
-    };
-
-    data.forEach(entry => {
-        if (!sectionGroups[entry.section][entry.category]) {
-            sectionGroups[entry.section][entry.category] = [];
-        }
-        sectionGroups[entry.section][entry.category].push(entry);
-    });
-
-    // 각 섹션별 정렬하여 렌더링
-    Object.keys(sectionGroups).forEach(section => {
-        const tableBody = document.querySelector(`#table_${section} tbody`);
-        if (!tableBody) return;
-
-        // "없음" 카테고리는 맨 위에 추가
-        if (sectionGroups[section]["없음"]) {
-            sectionGroups[section]["없음"].forEach(entry => appendEntryRow(tableBody, entry));
-        }
-
-        // 그 외 카테고리는 그룹별로 구분선 추가
-        Object.keys(sectionGroups[section]).forEach(category => {
-            if (category === "없음") return;
-
-            // 카테고리 구분선 추가
-            let categoryRow = document.createElement("tr");
-            categoryRow.classList.add("category_row");
-            categoryRow.setAttribute("data-category", category);
-            categoryRow.innerHTML = `<td colspan="4" class="category_label">${category}</td>`;
-            tableBody.appendChild(categoryRow);
-
-            // 해당 카테고리의 항목 추가
-            sectionGroups[section][category].forEach(entry => appendEntryRow(tableBody, entry));
-        });
-    });
-
-    updateTotals(); // 합계 업데이트
-    attachEventListeners(); // 수정/삭제 버튼 이벤트 연결
-}
-
-// 개별 엔트리 행 추가 함수
-function appendEntryRow(tableBody, entry) {
-    let row = document.createElement("tr");
-    row.setAttribute("data-id", entry.entryId);
-    row.setAttribute("data-category", entry.category);
-    row.innerHTML = `
-        <td style="width: 40%;"><input type="text" class="name_input" data-id="${entry.entryId}" value="${entry.name}"></td>
-        <td style="width: 40%;"><input type="text" class="amount_input" data-id="${entry.entryId}" value="${entry.amount.toLocaleString()}"></td>
-        <td style="width: 15%;"><button class="detail_button" data-id="${entry.entryId}">상세</button></td>
-        <td style="width: 5%;"><button class="delete_button" data-id="${entry.entryId}">x</button></td>
-    `;
-    tableBody.appendChild(row);
-}
-
-// 합계 금액 계산 함수
-function updateTotals() {
-    const sectionSums = {
-        income: 0,
-        investment: 0,
-        expense: 0
-    };
-
-    // 각 섹션별 합계 계산
-    data.forEach(entry => {
-        sectionSums[entry.section] += entry.amount;
-    });
-
-    // 합계를 UI에 반영
-    document.getElementById("total_income").textContent = sectionSums.income.toLocaleString();
-    document.getElementById("total_investment").textContent = sectionSums.investment.toLocaleString();
-    document.getElementById("total_expense").textContent = sectionSums.expense.toLocaleString();
-}
-
-// 수정 및 삭제 이벤트 리스너
-function attachEventListeners() {
-    document.querySelectorAll(".name_input, .amount_input").forEach(input => {
-        input.addEventListener("input", (event) => {
-            if (event.target.classList.contains("amount_input")) {
-                // 숫자 이외의 문자 제거 (소수점, 음수 부호 포함)
-                event.target.value = event.target.value.replace(/[^0-9]/g, '');
-            }
-        });
-
-        input.addEventListener("change", (event) => {
-            const entryId = parseInt(event.target.dataset.id);
-            const entry = data.find(e => e.entryId === entryId);
-            if (!entry) return;
-
-            if (event.target.classList.contains("name_input")) {
-                entry.name = event.target.value.trim();
-            } else if (event.target.classList.contains("amount_input")) {
-                let rawAmount = event.target.value.replace(/,/g, '');
-                entry.amount = rawAmount === '' || isNaN(rawAmount) ? 0 : parseInt(rawAmount);
-                event.target.value = entry.amount.toLocaleString(); // 천 단위 콤마 추가
-            }
-
-            updateTotals(); // 합계 업데이트
-        });
-
-        input.addEventListener("blur", (event) => {
-            if (event.target.classList.contains("amount_input")) {
-                const value = event.target.value.replace(/,/g, '');
-                if (value === '' || isNaN(value)) {
-                    event.target.value = '0';
-                    const entryId = parseInt(event.target.dataset.id);
-                    const entry = data.find(e => e.entryId === entryId);
-                    if (entry) entry.amount = 0;
-                    updateTotals(); // 합계 업데이트
-                }
-            }
+            // 새로 추가된 금액 필드에 이벤트 리스너 추가
+            const amountInput = newRow.querySelector('.amount_input');
+            addCommaHandlers(amountInput, section);
         });
     });
 
     // 삭제 버튼 이벤트 추가
-    document.querySelectorAll('.delete_button').forEach(button => {
-        button.addEventListener("click", event => {
-            const entryId = parseInt(event.target.dataset.id);
-            data = data.filter(entry => entry.entryId !== entryId);
-            renderTable(); // UI 갱신
-            console.log("삭제할 entryId:", entryId);
-            console.log("삭제 후 남은 데이터:", data);
+    document.addEventListener('click', (event) => {
+        if (event.target.classList.contains('delete_button')) {
+            const row = event.target.closest('tr');
+            const section = row.closest('.section').dataset.section;
+            const table = document.getElementById(`table_${section}`).querySelector('tbody');
+            const category = row.dataset.category;
+
+            row.remove();
+
+            // 카테고리에 남은 항목이 없으면 구분선 삭제
+            const remainingItems = table.querySelectorAll(`tr[data-category="${category}"]:not(.category_row)`);
+            if (remainingItems.length === 0 && category !== '없음') {
+                const categoryRow = table.querySelector(`tr.category_row[data-category="${category}"]`);
+                if (categoryRow) categoryRow.remove();
+            }
+
+            // 합계 업데이트
+            updateTotal(section);
+        }
+    });
+
+    // 모든 기본 금액 필드에 이벤트 리스너 추가 및 초기 처리
+    const amountInputs = document.querySelectorAll('.amount_input');
+    amountInputs.forEach((input) => {
+        const section = input.closest('.section').dataset.section;
+
+        // 이벤트 리스너 추가
+        addCommaHandlers(input, section);
+    });
+
+    // 합계 계산 함수
+    function updateTotal(section) {
+        const table = document.getElementById(`table_${section}`);
+        const amountInputs = table.querySelectorAll('.amount_input');
+        let total = 0;
+
+        amountInputs.forEach((input) => {
+            const rawValue = input.value.replace(/,/g, ''); // 콤마 제거
+            const value = parseFloat(rawValue) || 0;
+            total += value;
         });
-    });
 
-    // 상세 버튼 이벤트 추가 (모달 열기)
-    document.querySelectorAll(".detail_button").forEach(button => {
-        button.addEventListener("click", (event) => {
-            const entryId = parseInt(event.target.dataset.id);
-            const entry = data.find(e => e.entryId === entryId);
-            if (!entry) return;
-
-            const detailModal = document.getElementById("detail_modal");
-            const detailFrame = detailModal.querySelector(".modal_frame");
-
-            detailModal.style.display = "flex";
-            detailFrame.contentWindow.postMessage(entry, "*");
-        });
-    });
-}
-
-// 상세 모달에서 데이터 수정 반영
-window.addEventListener("message", (event) => {
-    const { entryId, section, category, name, amount, memo } = event.data;
-    const entry = data.find(e => e.entryId === entryId);
-    if (!entry) return;
-
-    entry.section = section;
-    entry.category = category;
-    entry.name = name;
-    entry.amount = amount;
-    entry.memo = memo;
-
-    console.log(`모달에서 수정됨:`, entry);
-    renderTable(); // UI 업데이트
-});
-
-// 모달 닫기 버튼
-document.querySelectorAll(".close_button").forEach(button => {
-    button.addEventListener("click", () => {
-        document.getElementById("detail_modal").style.display = "none";
-    });
-});
-
-document.addEventListener("DOMContentLoaded", () => {
-    // 모달 열기 기능
-    function openModal(modalId) {
-        const modal = document.getElementById(modalId);
-        if (modal) modal.style.display = "flex"; // 모달 표시
+        document.getElementById(`total_${section}`).textContent = total.toLocaleString();
     }
 
-    // 모달 닫기 기능
-    function closeModal(modalId) {
-        const modal = document.getElementById(modalId);
-        if (modal) modal.style.display = "none"; // 모달 숨기기
+    // 천 단위 콤마 처리 및 숫자만 입력 허용
+    function addCommaHandlers(input, section) {
+        input.addEventListener('input', () => {
+            // 숫자 이외의 값 제거
+            let rawValue = input.value.replace(/[^0-9]/g, ''); // 숫자만 남김
+            input.value = rawValue;
+
+            // 합계 업데이트
+            updateTotal(section);
+        });
+
+        input.addEventListener('blur', () => {
+            // 포커스 아웃 시 천 단위 콤마 추가
+            const rawValue = input.value.replace(/,/g, '');
+            if (!isNaN(rawValue) && rawValue !== '') {
+                input.value = Number(rawValue).toLocaleString(); // 숫자를 천 단위 콤마로 변환
+            }
+        });
+
+        input.addEventListener('focus', () => {
+            // 포커스 시 천 단위 콤마 제거
+            input.value = input.value.replace(/,/g, '');
+        });
     }
 
-    // 버튼 클릭 시 모달 열기
-    document.getElementById("info_button").addEventListener("click", () => openModal("info_modal"));
-    document.getElementById("register_button").addEventListener("click", () => openModal("register_modal"));
+    const detailModal = document.getElementById('detail_modal');
+    const detailModalFrame = detailModal.querySelector('.modal_frame');
+    const detailCloseButton = detailModal.querySelector('.close_button');
+    let currentRow = null; // 현재 선택된 행
 
-    // 닫기 버튼 클릭 시 모달 닫기
-    document.querySelectorAll(".close_button").forEach(button => {
-        button.addEventListener("click", () => {
-            const modal = button.closest(".modal");
-            if (modal) modal.style.display = "none";
-        });
+    // 상세 버튼 클릭 이벤트
+    document.addEventListener('click', (event) => {
+        if (event.target.classList.contains('detail_button')) {
+            detailModal.style.display = 'flex';
+            console.log('상세 모달 열기');
+            currentRow = event.target.closest('tr'); // 현재 선택된 행 저장
+
+            // 현재 행의 데이터를 상세창으로 전송
+            const section = currentRow.querySelector('.section_input').value || '';
+            const category = currentRow.querySelector('.category_input').value || '';
+            const item = currentRow.querySelector('.item_input').value || '';
+            const amount = currentRow.querySelector('.amount_input').value || '';
+            const memo = currentRow.querySelector('.memo_input').value || '';
+
+            console.log('부모 페이지에서 상세창으로 전송하는 데이터:', {
+                section,
+                category,
+                item,
+                amount,
+                memo
+            });
+
+            // 상세창으로 데이터 전송
+            detailModalFrame.contentWindow.postMessage({
+                section,
+                category,
+                item,
+                amount,
+                memo
+            }, '*');
+        }
     });
 
-    // 모달 바깥 영역 클릭 시 닫기
-    window.addEventListener("click", (event) => {
-        document.querySelectorAll(".modal").forEach(modal => {
+    // 상세 모달 닫기 버튼
+    detailCloseButton.addEventListener('click', () => {
+        detailModal.style.display = 'none';
+        console.log('상세 모달 닫기');
+    });
+
+    // 상세 모달에서 데이터 수신
+    window.addEventListener('message', (event) => {
+        const { section, category, item, amount, memo } = event.data;
+    
+        if (currentRow) {
+            const oldSection = currentRow.querySelector('.section_input').value;
+            const oldCategory = currentRow.querySelector('.category_input').value;
+    
+            // 현재 행 업데이트
+            currentRow.querySelector('.section_input').value = section || '';
+            currentRow.querySelector('.category_input').value = category || '';
+            currentRow.querySelector('.item_input').value = item || '';
+            currentRow.querySelector('.amount_input').value = amount || '';
+            currentRow.querySelector('.memo_input').value = memo || '';
+    
+            // 섹션이 변경된 경우
+            if (oldSection !== section) {
+                const oldTable = document.getElementById(`table_${oldSection}`).querySelector('tbody');
+                const newTable = document.getElementById(`table_${section}`).querySelector('tbody');
+    
+                // 기존 섹션에서 행 제거 및 새로운 섹션에 추가
+                oldTable.removeChild(currentRow);
+                newTable.appendChild(currentRow);
+    
+                // 기존 섹션 합계 업데이트
+                updateTotal(oldSection);
+    
+                // 새로운 섹션 합계 업데이트
+                updateTotal(section);
+    
+                // 금액 입력 필드 이벤트 리스너 재등록 (새로운 섹션에 맞게)
+                const amountInput = currentRow.querySelector('.amount_input');
+                addCommaHandlers(amountInput, section);
+            } else {
+                // 섹션 변경이 없을 경우 기존 섹션의 합계만 업데이트
+                updateTotal(section);
+            }
+    
+            // 카테고리 변경 시 항목 재배치
+            if (oldCategory !== category) {
+                const table = document.getElementById(`table_${section}`).querySelector('tbody');
+                createCategoryIfNotExists(table, category);
+    
+                const newCategoryRow = table.querySelector(`tr.category_row[data-category="${category}"]`);
+                table.insertBefore(currentRow, newCategoryRow.nextSibling);
+    
+                // 이전 카테고리 정리
+                const remainingItems = table.querySelectorAll(`tr[data-category="${oldCategory}"]:not(.category_row)`);
+                if (remainingItems.length === 0 && oldCategory !== '없음') {
+                    const oldCategoryRow = table.querySelector(`tr.category_row[data-category="${oldCategory}"]`);
+                    if (oldCategoryRow) oldCategoryRow.remove();
+                }
+            }
+        }
+    
+        detailModal.style.display = 'none';
+    });
+    
+
+    // 카테고리 생성 함수
+    function createCategoryIfNotExists(table, category) {
+        let categoryRow = table.querySelector(`tr.category_row[data-category="${category}"]`);
+        if (!categoryRow) {
+            categoryRow = document.createElement('tr');
+            categoryRow.classList.add('category_row');
+            categoryRow.setAttribute('data-category', category);
+            categoryRow.innerHTML = `<td colspan="4" class="category_label">${category !== '없음' ? category : ''}</td>`;
+            table.appendChild(categoryRow);
+        }
+    }
+
+    const infoButton = document.getElementById('info_button');
+    const infoModal = document.getElementById('info_modal');
+    const infoCloseButton = infoModal.querySelector('.close_button');
+
+    // 인포 모달 열기
+    infoButton.addEventListener('click', () => {
+        infoModal.style.display = 'flex';
+        console.log('인포 모달 열기');
+    });
+
+    // 인포 모달 닫기 버튼
+    infoCloseButton.addEventListener('click', () => {
+        infoModal.style.display = 'none';
+        console.log('인포 모달 닫기');
+    });
+
+    const registerButton = document.getElementById('register_button');
+    const registerModal = document.getElementById('register_modal');
+    const registerCloseButton = registerModal.querySelector('.close_button');
+
+    // 가입 모달 열기
+    registerButton.addEventListener('click', () => {
+        registerModal.style.display = 'flex';
+        console.log('가입 모달 열기');
+    });
+
+    // 가입 모달 닫기
+    registerCloseButton.addEventListener('click', () => {
+        registerModal.style.display = 'none';
+        console.log('가입 모달 닫기');
+    });
+
+    //모달 외부 클릭 시 모달 닫기
+    window.addEventListener('click', (event) => {
+        const modals = [detailModal, infoModal, registerModal];
+        
+        modals.forEach(modal => {
             if (event.target === modal) {
-                modal.style.display = "none";
+                modal.style.display = 'none';
+                console.log(`${modal.id} 모달 닫기`);
             }
         });
     });
 });
-
-
-//로그인 기능//
 
 //회원가입 완료 후 모달창 닫기
 window.addEventListener('message', (event) => {
@@ -333,84 +371,158 @@ function isLoggedIn() {
     return !!token;
 }
 
-// 데이터 저장 (POST 요청)
-document.getElementById("save_button").addEventListener("click", async () => {
+// '저장' 버튼 클릭 이벤트
+document.getElementById('save_button').addEventListener('click', async () => {
     if (!isLoggedIn()) {
-        alert("로그인 후 이용 가능합니다.");
+        alert('로그인 후 이용 가능합니다.');
+        return;
+    }
+
+    const rows = document.querySelectorAll('.section tbody tr:not(.category_row)');
+    if (rows.length === 0) {
+        alert('저장할 항목이 없습니다. 먼저 항목을 추가하세요.');
+        return;
+    }
+
+    const data = [];
+    let validationError = false; // 초기화
+
+    rows.forEach((row) => {
+        const sectionInput = row.querySelector('.section_input');
+        const categoryInput = row.querySelector('.category_input');
+        const itemInput = row.querySelector('.item_input');
+        const amountInput = row.querySelector('.amount_input');
+        const memoInput = row.querySelector('.memo_input');
+
+        // itemInput이 없으면 건너뜀
+        if (!itemInput) {
+            console.warn('itemInput이 없는 행은 건너뜁니다:', row);
+            return;
+        }
+
+        // itemInput 값이 비어 있는 경우 처리
+        if (itemInput.value.trim() === '') {
+            validationError = true;
+            itemInput.style.border = '2px solid red'; // 경고 표시
+            return;
+        } else {
+            itemInput.style.border = ''; // 경고 해제
+        }
+
+        // 금액 필드에서 콤마 제거 및 숫자로 변환
+        let rawAmount = amountInput?.value || '0';
+        rawAmount = rawAmount.replace(/,/g, ''); // 콤마 제거
+        const amount = parseFloat(rawAmount) || 0;
+
+        data.push({ 
+            section: sectionInput.value.trim(),
+            category: categoryInput.value.trim(),
+            item: itemInput.value.trim(),
+            amount: amount,
+            memo: memoInput.value.trim(),
+         });
+         console.log('수집된 데이터:', data);
+
+    });
+
+    if (validationError) {
+        alert('항목 이름을 모두 입력하세요!');
         return;
     }
 
     if (data.length === 0) {
-        alert("저장할 항목이 없습니다. 먼저 항목을 추가하세요.");
+        alert('저장할 데이터가 없습니다.');
         return;
     }
 
-    let validationError = false;
+    console.log('수집된 데이터:', data);
 
-    data.forEach(entry => {
-        if (!entry.name.trim()) {
-            validationError = true;
-        }
-    });
-
-    if (validationError) {
-        alert("항목 이름을 모두 입력하세요!");
-        return;
-    }
-
+    // API 요청
     try {
+        const token = localStorage.getItem('token');
         const response = await fetch('/api/saveData', {
-            method: "POST",
+            method: 'POST',
             headers: {
-                "Content-Type": "application/json",
-                "Authorization": `Bearer ${localStorage.getItem("token")}`
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`,
             },
-            body: JSON.stringify(data)
+            body: JSON.stringify({ data }),
         });
 
+        const result = await response.json();
         if (response.ok) {
-            alert("데이터가 저장되었습니다.");
+            alert('데이터가 저장되었습니다.');
         } else {
-            const result = await response.json();
-            alert(result.message || "저장에 실패했습니다.");
+            alert(result.message || '저장에 실패했습니다.');
         }
     } catch (error) {
-        console.error("저장 오류:", error);
-        alert("서버와 연결할 수 없습니다.");
+        console.error('저장 오류:', error);
+        alert('서버와 연결할 수 없습니다.');
     }
 });
 
-// 데이터 불러오기 (GET 요청)
-document.getElementById("load_button").addEventListener("click", async () => {
+
+// '불러오기' 버튼 클릭 이벤트
+document.getElementById('load_button').addEventListener('click', async () => {
     if (!isLoggedIn()) {
-        alert("로그인 후 이용 가능합니다.");
+        alert('로그인 후 이용 가능합니다.');
         return;
     }
 
+    const token = localStorage.getItem('token');
+
     try {
         const response = await fetch('/api/loadData', {
-            method: "GET",
+            method: 'GET',
             headers: {
-                "Authorization": `Bearer ${localStorage.getItem("token")}`
-            }
+                'Authorization': `Bearer ${token}`,
+            },
         });
 
-        if (response.ok) {
-            const result = await response.json();
+        const result = await response.json();
 
-            if (Array.isArray(result.data)) {  // 데이터를 배열로 확인
-                data = result.data;  // 기존 데이터 덮어쓰기
-                renderTable();   // 테이블 갱신
-                alert("데이터가 불러와졌습니다.");
-            } else {
-                alert("서버에서 잘못된 응답을 받았습니다.");
-            }
+        if (response.ok) {
+            const data = result.data;
+            console.log('불러온 데이터:', data);
+
+            // 테이블 초기화
+            document.querySelectorAll('.section tbody').forEach((tbody) => {
+                tbody.innerHTML = ''; // 기존 데이터 삭제
+            });
+
+            // 데이터 렌더링
+            data.forEach((item, index) => {
+                const section = document.querySelector(`.section[data-section="${item.section}"]`);
+                if (!section) {
+                    console.warn('잘못된 섹션:', item.section);
+                    return;
+                }
+
+                const table = section.querySelector('tbody');
+
+                // 새 행 추가
+                const newRow = document.createElement('tr');
+                newRow.setAttribute('data-category', item.category || '없음');
+                newRow.innerHTML = `
+                    <td><input type="text" name="${item.section}_item_${index + 1}" placeholder="항목" value="${item.item || '항목 없음'}" class="item_input"></td>
+                    <td><input type="text" name="${item.section}_amount_${index + 1}" placeholder="금액" value="${item.amount || 0}" class="amount_input"></td>
+                    <td><button class="detail_button">상세</button></td>
+                    <td><button class="delete_button">x</button></td>
+                `;
+
+                table.appendChild(newRow);
+
+                // 새로 추가된 금액 필드에 입력 이벤트 리스너 추가
+                const amountInput = newRow.querySelector('.amount_input');
+                addCommaHandlers(amountInput, item.section);
+            });
+
+            alert('데이터가 불러와졌습니다.');
         } else {
-            const result = await response.json();
-            alert(result.message || "불러오기에 실패했습니다.");
+            alert(result.message || '불러오기에 실패했습니다.');
         }
     } catch (error) {
-        console.error("불러오기 오류:", error);
-        alert("서버와 연결할 수 없습니다.");
+        console.error('불러오기 오류:', error);
+        alert('서버와 연결할 수 없습니다.');
     }
 });
