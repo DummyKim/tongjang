@@ -9,118 +9,47 @@
 body {
   font-family: Arial, sans-serif;
   display: flex;
+  flex-direction: column;
   height: 100vh; /* 전체 화면 높이 */
 }
 
-
-/* 사이드바 스타일 */
-.sidebar {
-  width: 10%; /* 화면 너비의 10% */
+header {
+  height: 10vh;
   background-color: #E6E6FA; /* 연한 보라색 */
-  height: 100vh; /* 전체 화면 높이 */
-  position: fixed; /* 고정 위치 */
-  left: 0;
-  top: 0;
   display: flex;
-  flex-direction: column;
-  align-items: center;
-  padding-top: 20px; /* 상단 여백 */
-  padding-left: 10px;
-  padding-right: 10px;
+  padding: 0 20px;
+  align-items: center; /* 세로 중앙 정렬 */
+  justify-content: space-between; /* 요소들을 양 끝으로 정렬 */
 }
 
-/* 사이드바 제목 스타일 */
-.sidebar h2 {
-  margin-bottom: 20px;
-  text-align: center;
-}
-
-#user_container {
-  width: 100%; /* 또는 적절한 고정 값 예: 300px */
-}
-
-/* 로그인 폼 스타일 */
-.login_form {
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-  align-items: stretch;
-  margin-bottom: 30px;
-}
-
-.login_form label {
-  margin-bottom: 5px;
-  font-weight: bold;
-  color: #4B0082;
-}
-
-.login_form input {
-  padding: 8px;
-  margin-bottom: 15px;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-}
-
-.login_form button {
-  padding: 10px;
-  font-weight: bold;
-  cursor: pointer;
-  margin-bottom: 10px;
-}
-
-/* 통장쪼개기란? 항목 스타일 */
-.information {
-  width: 100%;
-}
-
-.information p {
-  padding: 10px;
-  background-color: #4B0082; /* 배경색 변경 */
-  margin-bottom: 10px;
-  border-radius: 4px;
-  cursor: pointer;
-  text-align: center;
-  color: white;
-  font-weight: bold;
-  transition: background-color 0.3s ease;
-}
-
-.information p:hover {
-  background-color: #6A5ACD; /* 호버 시 색상 변경 */
-}
-
-/* 저장불러오기 항목 스타일 */
-.saveload{
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-  align-items: stretch;
-}
-
-.saveload button {
-  padding: 10px;
-  cursor: pointer;
-  font-weight: bold;
-  margin-bottom: 10px;
-}
-
-
-/* 메인 콘텐츠 스타일 */
-.main {
-  margin-left: 10%; /* 사이드바 너비만큼 왼쪽 여백 */
+main {
+  height: 80vh;
+  margin: 5px;
   display: flex; /* 가로로 나란히 배치 */
-  width: 90%; /* 나머지 화면 너비 */
-  height: 100vh; /* 전체 화면 높이 */
-  background-color: #f9f9f9;
-  overflow: hidden;
+  overflow-y: auto;
+  flex-wrap: wrap; /* 필요 시 줄바꿈 */
 }
 
-/* 전체 섹션 스타일 */
+footer {
+  height: 10vh;
+}
+
+button {
+ font-size: large;
+ cursor: pointer;
+ padding: 0 5px;
+}
+
+input {
+  font-size: large;
+}
+
+/* 섹션 스타일 */
 .section {
   flex: 1;
   padding: 10px;
-  overflow-y: auto;
   border-left: 1px solid #dcdcdc;
+  min-width: 300px; /* 최소 너비 지정 */
 }
 
 .section_header {
@@ -152,18 +81,18 @@ body {
 
 .data_table input {
   font-size: large;
-  width: 150px;
+  width: 100%;
 }
 
-.expand_button,
+.detail_button {
+  width: 90%; /* 버튼이 너무 작아지지 않도록 조정 */
+}
+
 .delete_button {
+  width: 90%;
   cursor: pointer;
   border: none;
   background: none;
-  font-size: large;
-}
-.detail_button,
-.add_button {
   font-size: large;
 }
 
@@ -181,10 +110,8 @@ body {
 }
 
 
-
 /* 합계 표시 영역 */
 .total_container {
-  z-index: 999; /*모달보다 낮게 설정*/
   bottom: 0; /* 하단에 고정 */
   background-color: #f1f1f1; /* 배경색 추가 */
   padding: 10px; /* 여백 */
@@ -194,13 +121,12 @@ body {
   font-weight: bold;
 }
 
-/* 상세 창 */
+
 
 /* 모달 배경 */
 .modal {
   display: none; /* 기본적으로 숨김 */
   position: fixed;
-  z-index: 1000; /* 최상위로 표시 */
   left: 0;
   top: 0;
   width: 100%;
@@ -240,4 +166,38 @@ body {
   width: 100%;
   height: 100%;
   border: none;
+}
+
+
+
+/* 반응형 스타일 */
+@media (max-width: 768px) {
+  main {
+    flex-direction: column; /* 모바일에서는 1개씩 배치 */
+    font-size: medium;
+  }
+  button {
+    font-size: large;
+  }
+  .modal_content{
+    width: 100%;
+    height: 100%;
+  }
+  .section {
+    width: 100%;
+    border-left: none;
+  }
+  .data_table th,
+  .data_table td {
+    font-size: medium; /* 폰트 크기 조정 */
+  }
+  .data_table input {
+    font-size: medium;
+  }
+  .detail_button,
+  .delete_button {
+    width: 100%;
+    padding: 0;
+    font-size: medium;
+  }
 }

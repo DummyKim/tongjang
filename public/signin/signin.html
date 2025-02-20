@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ko">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -29,6 +29,7 @@
             margin-bottom: 10px;
             border: 1px solid #ccc;
             border-radius: 4px;
+            font-size: large;
         }
         .modal button {
             width: 107%;
@@ -39,9 +40,16 @@
             border-radius: 4px;
             cursor: pointer;
             font-weight: bold;
+            font-size: large;
         }
         .modal button:hover {
             background-color: #6A5ACD;
+        }
+        #reg-error {
+            color: red;
+            display: none;
+            text-align: center;
+            margin-top: 10px;
         }
     </style>
 </head>
@@ -51,9 +59,9 @@
         <input type="text" id="reg-username" placeholder="사용자 이름" required>
         <input type="email" id="reg-email" placeholder="이메일" required>
         <input type="password" id="reg-password" placeholder="비밀번호" required>
+        <input type="password" id="confirm-password" placeholder="비밀번호 확인" required>
         <button id="reg-btn">회원가입</button>
-        <p id="reg-error" style="color: red; display: none;"></p>
-
+        <p id="reg-error"></p>
     </div>
 
     <script>
@@ -61,12 +69,19 @@
             const username = document.getElementById('reg-username').value.trim();
             const email = document.getElementById('reg-email').value.trim();
             const password = document.getElementById('reg-password').value.trim();
+            const confirmPassword = document.getElementById('confirm-password').value.trim();
             const errorElement = document.getElementById('reg-error');
 
             errorElement.style.display = 'none';
 
-            if (!username || !email || !password) {
+            if (!username || !email || !password || !confirmPassword) {
                 errorElement.textContent = '모든 필드를 입력하세요.';
+                errorElement.style.display = 'block';
+                return;
+            }
+
+            if (password !== confirmPassword) {
+                errorElement.textContent = '비밀번호가 일치하지 않습니다.';
                 errorElement.style.display = 'block';
                 return;
             }
@@ -83,11 +98,9 @@
                 const result = await response.json();
 
                 if (response.ok) {
-                    console.log('회원가입 성공:', result); // 디버깅용 로그 추가
                     alert('회원가입이 완료되었습니다! 이제 로그인하세요.');
                     window.parent.postMessage({ action: 'closeRegisterModal' }, '*');
                 } else {
-                    console.log('회원가입 실패:', result); // 실패 응답 로그 추가
                     errorElement.textContent = result.message || '회원가입에 실패했습니다.';
                     errorElement.style.display = 'block';
                 }
