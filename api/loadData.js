@@ -20,8 +20,14 @@ export default async function handler(req, res) {
                     return res.status(404).json({ message: '저장된 데이터가 없습니다.' });
                 }
                 
-                console.log('불러온 데이터:', data);
-                res.status(200).json({ message: '데이터가 불러와졌습니다.', data });
+                //  entryId를 숫자로 변환하여 반환
+                const processedData = data.map(entry => ({
+                    ...entry._doc,
+                    entryId: parseInt(entry.entryId, 10), // 🔹 String → Number 변환
+                }));
+
+                console.log('불러온 데이터:', processedData);
+                res.status(200).json({ message: '데이터가 불러와졌습니다.', data: processedData });
             });
         } catch (error) {
             console.error('데이터 불러오기 오류:', error);
