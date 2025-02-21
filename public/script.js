@@ -212,6 +212,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // 버튼 클릭 시 모달 열기
     document.getElementById("info_button").addEventListener("click", () => openModal("info_modal"));
+    document.getElementById("info_icon").addEventListener("click", () => openModal("info_modal"));
     document.getElementById("register_button").addEventListener("click", () => openModal("register_modal"));
 
     // 닫기 버튼 클릭 시 모달 닫기

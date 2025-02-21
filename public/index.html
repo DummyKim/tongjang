@@ -5,9 +5,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>통장쪼개기 Web</title>
     <link rel="stylesheet" href="styles.css">
+    <!-- Font Awesome 아이콘 라이브러리 추가 -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
 </head>
 <body>
-    <header>
+    <!-- 기존 헤더 (PC 전용) -->
+    <header id="pc_header">
     <h2>통장 쪼개기 Web</h2>
     <div class="information">
         <button id="info_button">통장 쪼개기란?</p>
@@ -36,6 +39,18 @@
         <button id="save_button">저장</button>
         <button id="load_button">불러오기</button>
     </div>
+    </header>
+
+    <!-- 모바일 전용 헤더 -->
+    <header id="mobile_header">
+        <div class="header-container">
+            <span class="logo">통장 쪼개기 Web</span>
+            <div class="header-icons">
+                <i class="fa-solid fa-question-circle" id="info_icon"></i>
+                <i class="fa-solid fa-user-circle" id="login_icon"></i>
+                <i class="fa-solid fa-save" id="save_icon"></i>
+            </div>
+        </div>
     </header>
 
     <main>

@@ -22,6 +22,16 @@ header {
   justify-content: space-between; /* 요소들을 양 끝으로 정렬 */
 }
 
+/* PC 전용 헤더 (초기 표시) */
+#pc_header {
+  display: flex;
+}
+
+/* 모바일 전용 헤더 (초기 숨김) */
+#mobile_header {
+  display: none;
+}
+
 main {
   flex: 1;
   display: flex;
@@ -178,6 +188,39 @@ input {
 
 /* 반응형 스타일 */
 @media (max-width: 768px) {
+    /* 기존 PC 헤더 숨김 */
+    #pc_header {
+      display: none;
+  }
+
+    /* 모바일 전용 헤더 표시 */
+    #mobile_header {
+      display: flex; /* 모바일에서만 활성화 */
+      justify-content: space-between;
+      align-items: center;
+  }
+  .header-container {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .logo {
+      font-size: 24px;
+      font-weight: bold;
+  }
+
+  .header-icons {
+      display: flex;
+      gap: 15px; /* 아이콘 사이 간격 */
+  }
+
+  .header-icons i {
+      font-size: 30px;
+      cursor: pointer;
+  }
+
   main {
     flex-direction: column; /* 모바일에서는 1개씩 배치 */
     font-size: medium;
