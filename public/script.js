@@ -400,10 +400,17 @@ document.getElementById("load_button").addEventListener("click", async () => {
         if (response.ok) {
             const result = await response.json();
 
-            if (Array.isArray(result.data)) {  // 데이터를 배열로 확인
+            if (Array.isArray(result.data)) {
                 data = result.data;  // 기존 데이터 덮어쓰기
+
+                // 가장 큰 entryId 찾기
+                const maxEntryId = data.length > 0 ? Math.max(...data.map(entry => entry.entryId)) : 0;
+                entryIdCounter = maxEntryId + 1; // 새로운 항목 추가 시 중복되지 않도록 설정
+
                 renderTable();   // 테이블 갱신
                 alert("데이터가 불러와졌습니다.");
+                console.log("불러온 데이터의 최대 entryId:", maxEntryId);
+                console.log("entryIdCounter 업데이트:", entryIdCounter);
             } else {
                 alert("서버에서 잘못된 응답을 받았습니다.");
             }
