@@ -10,11 +10,11 @@ body {
   font-family: Arial, sans-serif;
   display: flex;
   flex-direction: column;
-  height: 100vh; /* 전체 화면 높이 */
+  min-height: 100vh; /* 전체 화면 높이 */
 }
 
 header {
-  height: 10vh;
+  min-height: 60px;
   background-color: #E6E6FA; /* 연한 보라색 */
   display: flex;
   padding: 0 20px;
@@ -23,11 +23,12 @@ header {
 }
 
 main {
-  height: 80vh;
+  flex: 1;
+  display: flex;
+  gap: 10px;
+  height: 80dvh;
   margin: 5px;
-  display: flex; /* 가로로 나란히 배치 */
   overflow-y: auto;
-  flex-wrap: wrap; /* 필요 시 줄바꿈 */
 }
 
 footer {
@@ -47,9 +48,15 @@ input {
 /* 섹션 스타일 */
 .section {
   flex: 1;
+  min-width: 0; /* flex-basis 계산을 위해 필요 */
   padding: 10px;
   border-left: 1px solid #dcdcdc;
-  min-width: 300px; /* 최소 너비 지정 */
+  display: flex;
+  flex-direction: column;
+}
+
+.section:first-child {
+  border-left: none;
 }
 
 .section_header {
@@ -121,8 +128,6 @@ input {
   font-weight: bold;
 }
 
-
-
 /* 모달 배경 */
 .modal {
   display: none; /* 기본적으로 숨김 */
@@ -178,6 +183,14 @@ input {
   }
   button {
     font-size: large;
+  }
+  .section {
+    width: 100%; /* 한 줄에 하나씩 배치 */
+    border-left: none;
+    border-top: 1px solid #dcdcdc;
+  }
+  .section:first-child {
+    border-top: none;
   }
   .modal_content{
     width: 100%;
