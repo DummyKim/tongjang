@@ -402,7 +402,7 @@ document.getElementById('logout_button').addEventListener('click', () => {
     if (isConfirmed) {
         localStorage.removeItem('token'); // 로그아웃 처리
         alert('로그아웃되었습니다.');
-        showLoggedOutUI(); // 로그인 전 UI로 전환
+        showLoggedInUI(); // 로그인 전 UI로 전환
     }
 });
 
