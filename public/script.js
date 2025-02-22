@@ -395,13 +395,15 @@ function showLoggedOutUI() {
     document.getElementById('login_after').style.display = 'none'; // 로그인 후 UI 숨김
 }
 
-// 로그아웃 처리
 document.getElementById('logout_button').addEventListener('click', () => {
-    localStorage.removeItem('token'); // JWT 삭제
-    alert('로그아웃되었습니다.');
-    showLoggedOutUI(); // 로그인 전 UI로 전환
+    const confirmLogout = confirm("로그아웃 하시겠습니까?");
+    
+    if (confirmLogout) {
+        localStorage.removeItem('token'); // JWT 삭제
+        alert('로그아웃되었습니다.');
+        showLoggedOutUI(); // 로그인 전 UI로 전환
+    }
 });
-
 
 // 로그인 여부 확인 함수
 function isLoggedIn() {
