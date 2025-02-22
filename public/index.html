@@ -9,40 +9,59 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
 </head>
 <body>
-    <header id="header">
+    <!-- 기존 헤더 (PC 전용) -->
+    <header id="pc_header">
         <div class = "header_container">
             <span class = "logo">통장 쪼개기 Web</span>
         <div class = "header_menu">
-            <!-- 인포메이션 -->
             <div class="information" id="info_button">
                 <i class="fa-solid fa-question-circle" id="pc_info_icon"></i>
-                <span id="pc_info_span" class="mobile_hidden">통장 쪼개기란?</p>
+                <span id="pc_info_span">통장 쪼개기란?</p>
             </div>
             <div id="user_container">
                 <!-- 로그인 전 -->
                 <div id="login_before">
-                    <form class="login_menu">
+                    <form class="login_form">
                         <i class="fa-solid fa-user-circle" id="pc_login_icon"></i>
-                        <span id="pc_login_span" class="mobile_hidden">로그인</span>
+                        <span id="pc_login_span">로그인</span>
+                        <input type="email" id="email" name="email" placeholder="이메일" required>
+                        <input type="password" id="password" name="password" placeholder="비밀번호" required>
+                        <button type="submit">로그인</button>
+                        <button id="register_button" type="button">회원가입</button>
                     </form>
                 </div>
                 
                 <!-- 로그인 후 -->
                 <div id="login_after" style="display: none;">
-                    <form class="login_menu">
+                    <form class="login_form">
                     <i class="fa-solid fa-user-circle" id="pc_login_icon"></i>
                     <p id="user_name"></p>
                     <button id="logout_button">로그아웃</button>
                     </form>
                 </div>
             </div>
-            <!-- 저장 불러오기 -->
-            <div class="saveload" id="saveload">
+        
+            <div class="saveload">
                 <i class="fa-solid fa-save" id="pc_save_icon"></i>
-                <span id="pc_saveload_span" class="mobile_hidden">저장/불러오기</span>
+                <span id="pc_saveload_span">저장/불러오기</span>
+                <button id="save_button">저장</button>
+                <button id="load_button">불러오기</button>
             </div>
         </div>
 
+        </div>
+
+    </header>
+
+    <!-- 모바일 전용 헤더 -->
+    <header id="mobile_header">
+        <div class="header-container">
+            <span class="logo">통장 쪼개기 Web</span>
+            <div class="header-icons">
+                <i class="fa-solid fa-question-circle" id="info_icon"></i>
+                <i class="fa-solid fa-user-circle" id="login_icon"></i>
+                <i class="fa-solid fa-save" id="save_icon"></i>
+            </div>
         </div>
     </header>
 
@@ -121,66 +140,29 @@
     <footer>
     </footer>    
 
-<!-- 통장 쪼개기란? 모달 창 -->
-<div id="info_modal" class="modal">
-<div class="modal_content">
-    <iframe src="information.html" class="modal_frame"></iframe>
-    <span class="close_button">&times;</span>
-</div>
-</div>
-
-<!--로그인 모달 창-->
-<div id="login_modal" class="modal">
-    <div class="modal_content modal_content_small">
-        <div class="login">
-            <h2>로그인</h2><br>
-            <form id="login_form">
-                <input type="email" id="email" class="modal_input" name="email" placeholder="이메일" required>
-                <input type="password" id="password" class="modal_input" name="password" placeholder="비밀번호" required>
-                <button type="submit" class="modal_button">로그인</button>
-                <button id="register_button" type="button" class="modal_button">회원가입</button>
-            </form>
+    <!-- 통장 쪼개기란? 모달 창 -->
+    <div id="info_modal" class="modal">
+        <div class="modal_content">
+            <iframe src="information.html" class="modal_frame"></iframe>
             <span class="close_button">&times;</span>
         </div>
-</div>
-</div>
+        </div>
     
-<!-- 회원가입 모달 창 -->
-<div id="register_modal" class="modal">
-<div class="modal_content modal_content_small">
-    <div class="register">
-        <h2>회원가입</h2><br>
-        <input type="text" id="reg-username" class="modal_input" placeholder="사용자 이름" required>
-        <input type="email" id="reg-email" class="modal_input" placeholder="이메일" required>
-        <input type="password" id="reg-password" class="modal_input" placeholder="비밀번호" required>
-        <input type="password" id="confirm-password" class="modal_input" placeholder="비밀번호 확인" required>
-        <button id="reg-btn" class="modal_button">회원가입</button>
-        <p id="reg-error"></p>
-    </div>
-    <span class="close_button">&times;</span>
-</div>
-</div>
-
-<!-- 저장불러오기 모달 창 -->
-<div id="saveload_modal" class="modal">
-<div class="modal_content modal_content_small">
-    <div class="saveload">
-        <h2>저장 / 불러오기</h2><br>
-        <button id="save_button" class="modal_button">저장</button>
-        <button id="load_button" class="modal_button">불러오기</button>
-    </div>
-    <span class="close_button">&times;</span>
-</div>
-</div>
-
-            
-<!-- 상세 모달 창 -->
-<div id="detail_modal" class="modal">
-<div class="modal_content">
-    <iframe src="detail/detail.html" class="modal_frame"></iframe>
-    <span class="close_button">&times;</span>
-</div>
-</div>
+        <!-- 회원가입 모달 창 -->
+        <div id="register_modal" class="modal">
+        <div class="modal_content">
+            <iframe src="signin/signin.html" class="modal_frame"></iframe>
+            <span class="close_button">&times;</span>
+        </div>
+        </div>
+    
+        <!-- 상세 모달 창 -->
+        <div id="detail_modal" class="modal">
+        <div class="modal_content">
+            <iframe src="detail/detail.html" class="modal_frame"></iframe>
+            <span class="close_button">&times;</span>
+        </div>
+        </div>
 
     <script src="script.js"></script>
 </body>
