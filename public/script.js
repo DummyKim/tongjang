@@ -197,6 +197,7 @@ document.querySelectorAll(".close_button").forEach(button => {
     });
 });
 
+
 document.addEventListener("DOMContentLoaded", () => {
     // 모달 열기 기능
     function openModal(modalId) {
@@ -212,8 +213,9 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // 버튼 클릭 시 모달 열기
     document.getElementById("info_button").addEventListener("click", () => openModal("info_modal"));
-    document.getElementById("info_icon").addEventListener("click", () => openModal("info_modal"));
+    document.getElementById("login_before").addEventListener("click", () => openModal("login_modal"));
     document.getElementById("register_button").addEventListener("click", () => openModal("register_modal"));
+    document.getElementById("saveload").addEventListener("click", () => openModal("saveload_modal"));
 
     // 닫기 버튼 클릭 시 모달 닫기
     document.querySelectorAll(".close_button").forEach(button => {
@@ -233,8 +235,54 @@ document.addEventListener("DOMContentLoaded", () => {
     });
 });
 
-
 //로그인 기능//
+
+//회원가입
+document.getElementById('reg-btn').addEventListener('click', async () => {
+    const username = document.getElementById('reg-username').value.trim();
+    const email = document.getElementById('reg-email').value.trim();
+    const password = document.getElementById('reg-password').value.trim();
+    const confirmPassword = document.getElementById('confirm-password').value.trim();
+    const errorElement = document.getElementById('reg-error');
+
+    errorElement.style.display = 'none';
+
+    if (!username || !email || !password || !confirmPassword) {
+        errorElement.textContent = '모든 필드를 입력하세요.';
+        errorElement.style.display = 'block';
+        return;
+    }
+
+    if (password !== confirmPassword) {
+        errorElement.textContent = '비밀번호가 일치하지 않습니다.';
+        errorElement.style.display = 'block';
+        return;
+    }
+
+    try {
+        const response = await fetch('/api/register', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ username, email, password }),
+        });
+
+        const result = await response.json();
+
+        if (response.ok) {
+            alert('회원가입이 완료되었습니다! 이제 로그인하세요.');
+            window.parent.postMessage({ action: 'closeRegisterModal' }, '*');
+        } else {
+            errorElement.textContent = result.message || '회원가입에 실패했습니다.';
+            errorElement.style.display = 'block';
+        }
+    } catch (error) {
+        errorElement.textContent = '서버와 연결할 수 없습니다.';
+        errorElement.style.display = 'block';
+    }
+});
+
 
 //회원가입 완료 후 모달창 닫기
 window.addEventListener('message', (event) => {
@@ -333,6 +381,7 @@ function isLoggedIn() {
     const token = localStorage.getItem('token');
     return !!token;
 }
+
 
 // 데이터 저장 (POST 요청)
 document.getElementById("save_button").addEventListener("click", async () => {

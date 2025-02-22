@@ -22,14 +22,23 @@ header {
   justify-content: space-between; /* 요소들을 양 끝으로 정렬 */
 }
 
-/* PC 전용 헤더 (초기 표시) */
-#pc_header {
-  display: flex;
+.logo {
+  font-size: 24px;
+  font-weight: bold;
 }
 
-/* 모바일 전용 헤더 (초기 숨김) */
-#mobile_header {
-  display: none;
+.header_container {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.header_menu {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 15px;
 }
 
 main {
@@ -44,7 +53,10 @@ main {
 footer {
   height: 10vh;
 }
-
+i {
+ font-size: x-large;
+ align-items: center;
+}
 button {
  font-size: large;
  cursor: pointer;
@@ -163,6 +175,18 @@ input {
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }
 
+.modal_content_small {
+  padding: 10px;
+  position: relative;
+  background-color: #fff;
+  width: 30%;
+  height: 60%;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+
 /* 모달 닫기 버튼 */
 .close_button {
   position: absolute;
@@ -184,21 +208,42 @@ input {
   border: none;
 }
 
+/* 로그인, 회원가입, 저장불러오기 모달 스타일 */
+.modal_button{
+  width: 100%;
+  padding: 10px;
+  background-color: #4B0082;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-weight: bold;
+  font-size: large;
+  margin-bottom: 10px;
+}
+.modal_button:hover{
+  background-color: #6A5ACD;
+}
+
+.modal_input{
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 10px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: large;
+}
+
 
 
 /* 반응형 스타일 */
 @media (max-width: 768px) {
     /* 기존 PC 헤더 숨김 */
-    #pc_header {
-      display: none;
-  }
-
-    /* 모바일 전용 헤더 표시 */
-    #mobile_header {
+    #header {
       display: flex; /* 모바일에서만 활성화 */
       justify-content: space-between;
-      align-items: center;
-  }
+      align-items: center;  }
+
   .header-container {
     width: 100%;
     display: flex;
@@ -211,14 +256,8 @@ input {
       font-weight: bold;
   }
 
-  .header-icons {
-      display: flex;
-      gap: 15px; /* 아이콘 사이 간격 */
-  }
-
-  .header-icons i {
-      font-size: 30px;
-      cursor: pointer;
+  .mobile_hidden {
+    display: none;
   }
 
   main {
@@ -237,8 +276,20 @@ input {
     border-top: none;
   }
   .modal_content{
-    width: 100%;
-    height: 100%;
+    position: fixed;
+    top: 5%;
+    justify-content: center;
+    align-items: center;
+    width: 90%;
+    height: 80%;
+  }
+  .modal_content_small{
+    position: fixed;
+    top: 5%;
+    justify-content: center;
+    align-items: center;
+    width: 90%;
+    height: 40%;
   }
   .section {
     width: 100%;
