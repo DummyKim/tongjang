@@ -269,12 +269,14 @@ document.getElementById('reg-btn').addEventListener('click', async () => {
     if (!username || !email || !password || !confirmPassword) {
         errorElement.textContent = '모든 필드를 입력하세요.';
         errorElement.style.display = 'block';
+        hideLoading();
         return;
     }
 
     if (password !== confirmPassword) {
         errorElement.textContent = '비밀번호가 일치하지 않습니다.';
         errorElement.style.display = 'block';
+        hideLoading();
         return;
     }
 
