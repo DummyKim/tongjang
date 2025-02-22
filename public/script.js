@@ -384,6 +384,7 @@ async function fetchProtectedData() {
 
 // 로그인 후 UI 전환
 function showLoggedInUI(username) {
+    console.log('showLoggedInUI 함수 호출됨', {username});
     document.getElementById('login_before').style.display = 'none'; // 로그인 전 UI 숨김
     document.getElementById('login_after').style.display = 'block'; // 로그인 후 UI 표시
     document.getElementById('user_name').innerHTML = `사용자명: ${username}`; // 사용자명 표시
@@ -391,18 +392,41 @@ function showLoggedInUI(username) {
 
 // 로그인 전 UI 복구
 function showLoggedOutUI() {
+    console.log('showLoggedOutUI 함수 호출됨');
+    console.trace('showLoggedOutUI 호출 스택:'); // 호출 스택 추적
     document.getElementById('login_before').style.display = 'block'; // 로그인 전 UI 표시
     document.getElementById('login_after').style.display = 'none'; // 로그인 후 UI 숨김
 }
 
 // 로그아웃 기능
+/*
 document.getElementById('logout_button').addEventListener('click', () => {
     const isConfirmed = confirm("로그아웃 하시겠습니까?");
     
     if (isConfirmed) {
         localStorage.removeItem('token'); // 로그아웃 처리
         alert('로그아웃되었습니다.');
-        showLoggedInUI(); // 로그인 전 UI로 전환
+        showLoggedOutUI(); // 로그인 전 UI로 전환
+    }
+});
+*/
+
+// 로그아웃 버튼에 상세 로깅 추가
+document.getElementById('logout_button').addEventListener('click', () => {
+    console.log('로그아웃 버튼 클릭됨');
+    
+    const isConfirmed = confirm("로그아웃 하시겠습니까?");
+    console.log('로그아웃 확인 결과:', isConfirmed);
+    
+    if (isConfirmed) {
+        console.log('로그아웃 진행 시작');
+        localStorage.removeItem('token');
+        console.log('토큰 삭제됨');
+        alert('로그아웃되었습니다.');
+        showLoggedOutUI();
+        console.log('로그아웃 처리 완료');
+    } else {
+        console.log('로그아웃 취소됨');
     }
 });
 
