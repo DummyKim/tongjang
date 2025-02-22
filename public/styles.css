@@ -63,6 +63,11 @@ i {
  font-size: x-large;
  align-items: center;
 }
+
+#pc_logout_icon {
+  color: #4B0082 !important;
+}
+
 button {
  font-size: large;
  cursor: pointer;
@@ -186,7 +191,7 @@ input {
   position: relative;
   background-color: #fff;
   width: 30%;
-  height: 50%;
+  height: 60%;
   border-radius: 8px;
   overflow: hidden;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
@@ -311,7 +316,7 @@ input {
     justify-content: center;
     align-items: center;
     width: 90%;
-    height: 60%;
+    height: 50%;
   }
   .modal_content_x_small {
     position: fixed;
