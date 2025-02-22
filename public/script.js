@@ -396,11 +396,9 @@ function showLoggedOutUI() {
 }
 
 document.getElementById('logout_button').addEventListener('click', () => {
-    if (confirm("로그아웃 하시겠습니까?")) { 
-        localStorage.removeItem('token');
-        alert('로그아웃되었습니다.');
-        showLoggedOutUI(); // 로그인 전 UI로 전환
-    }
+    if (!window.confirm("로그아웃 하시겠습니까?")) return; // "아니오" 선택 시 즉시 종료
+    localStorage.removeItem('token');
+    alert('로그아웃되었습니다.');
 });
 
 // 로그인 여부 확인 함수
