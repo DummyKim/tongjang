@@ -317,6 +317,7 @@ document.getElementById('login_form').addEventListener('submit', async (event) =
         if (response.ok) {
             alert('로그인 성공!');
             localStorage.setItem('token', result.token); // 토큰 저장
+            closeModal("login_modal"); // 로그인 후 모달 닫기
             showLoggedInUI(result.username); // 로그인 후 UI 전환
         } else {
             alert(result.message || '로그인 실패');
@@ -459,6 +460,7 @@ document.getElementById("load_button").addEventListener("click", async () => {
 
                 renderTable();   // 테이블 갱신
                 alert("데이터가 불러와졌습니다.");
+                closeModal("saveload_modal"); // 로그인 후 모달 닫기
                 console.log("불러온 데이터의 최대 entryId:", maxEntryId);
                 console.log("entryIdCounter 업데이트:", entryIdCounter);
             } else {
