@@ -44,7 +44,6 @@ header {
 .login_menu_after{
   display: flex;
   align-items: center;
-  gap: 10px;
 }
 
 main {
