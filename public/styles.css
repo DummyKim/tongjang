@@ -202,7 +202,6 @@ input {
   overflow: hidden;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
   align-items: center;
-  justify-content: center;
 }
 
 
@@ -311,8 +310,9 @@ input {
     height: 40%;
   }
   .modal_content_x_small {
+    position: fixed;
+    top: 5%;
     padding: 10px;
-    position: relative;
     background-color: #fff;
     width: 10%;
     height: 10%;
