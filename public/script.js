@@ -413,6 +413,8 @@ document.getElementById('logout_button').addEventListener('click', () => {
 
 // 로그아웃 버튼에 상세 로깅 추가
 document.getElementById('logout_button').addEventListener('click', () => {
+    event.preventDefault();
+
     console.log('로그아웃 버튼 클릭됨');
     
     const isConfirmed = confirm("로그아웃 하시겠습니까?");
