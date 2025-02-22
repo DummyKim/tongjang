@@ -201,6 +201,8 @@ input {
   border-radius: 8px;
   overflow: hidden;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  align-items: center;
+  justify-content: center;
 }
 
 
@@ -307,6 +309,18 @@ input {
     align-items: center;
     width: 90%;
     height: 40%;
+  }
+  .modal_content_x_small {
+    padding: 10px;
+    position: relative;
+    background-color: #fff;
+    width: 10%;
+    height: 10%;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    align-items: center;
+    justify-content: center;
   }
   .section {
     width: 100%;
