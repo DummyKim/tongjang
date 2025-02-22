@@ -287,6 +287,7 @@ input {
   }
     #logout_button {
     font-size: small;
+    padding: 1px;
   }
   .section {
     width: 100%; /* 한 줄에 하나씩 배치 */
