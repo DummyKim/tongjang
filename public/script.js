@@ -197,6 +197,11 @@ document.querySelectorAll(".close_button").forEach(button => {
     });
 });
 
+// 모달 닫기 기능
+function closeModal(modalId) {
+    const modal = document.getElementById(modalId);
+    if (modal) modal.style.display = "none"; // 모달 숨기기
+}
 
 document.addEventListener("DOMContentLoaded", () => {
     // 모달 열기 기능
