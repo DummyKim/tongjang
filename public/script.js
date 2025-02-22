@@ -264,6 +264,8 @@ document.getElementById('reg-btn').addEventListener('click', async () => {
 
     errorElement.style.display = 'none';
 
+    showLoading();
+
     if (!username || !email || !password || !confirmPassword) {
         errorElement.textContent = '모든 필드를 입력하세요.';
         errorElement.style.display = 'block';
@@ -297,6 +299,8 @@ document.getElementById('reg-btn').addEventListener('click', async () => {
     } catch (error) {
         errorElement.textContent = '서버와 연결할 수 없습니다.';
         errorElement.style.display = 'block';
+    } finally {
+        hideLoading();
     }
 });
 
