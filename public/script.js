@@ -297,7 +297,7 @@ window.addEventListener('message', (event) => {
 });
 
 //로그인
-document.getElementById('submit').addEventListener('submit', async (event) => {
+document.getElementById('login_form').addEventListener('submit', async (event) => {
     event.preventDefault(); // 폼 기본 동작 중지
 
     const email = document.getElementById('email').value.trim();
