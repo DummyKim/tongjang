@@ -190,6 +190,18 @@ window.addEventListener("message", (event) => {
     renderTable(); // UI 업데이트
 });
 
+
+//처리중 모달
+
+function showLoading() {
+    document.getElementById("loading_modal").style.display = "flex"; // 로딩 모달 표시
+}
+
+function hideLoading() {
+    document.getElementById("loading_modal").style.display = "none"; // 로딩 모달 숨김
+}
+
+
 // 모달 닫기 버튼
 document.querySelectorAll(".close_button").forEach(button => {
     button.addEventListener("click", () => {
@@ -304,6 +316,7 @@ window.addEventListener('message', (event) => {
 //로그인
 document.getElementById('login_form').addEventListener('submit', async (event) => {
     event.preventDefault(); // 폼 기본 동작 중지
+    showLoading();
 
     const email = document.getElementById('email').value.trim();
     const password = document.getElementById('password').value.trim();
@@ -332,6 +345,8 @@ document.getElementById('login_form').addEventListener('submit', async (event) =
         alert('서버와 연결할 수 없습니다.');
         console.error('로그인 오류:', error);
         showLoggedOutUI(); // 에러 발생 시 UI 복구
+    } finally {
+        hideLoading(); // 처리 완료 후 모달 숨김
     }
 });
 
@@ -392,9 +407,11 @@ function isLoggedIn() {
 // 데이터 저장 (POST 요청)
 document.getElementById("save_button").addEventListener("click", async () => {
     console.log({ data });
+    showLoading();
 
     if (!isLoggedIn()) {
         alert("로그인 후 이용 가능합니다.");
+        hideLoading();
         return;
     }
 
@@ -435,13 +452,18 @@ document.getElementById("save_button").addEventListener("click", async () => {
     } catch (error) {
         console.error("저장 오류:", error);
         alert("서버와 연결할 수 없습니다.");
+    } finally {
+        hideLoading(); // 처리 완료 후 모달 숨김
     }
 });
 
 // 데이터 불러오기 (GET 요청)
 document.getElementById("load_button").addEventListener("click", async () => {
+    showLoading();
+
     if (!isLoggedIn()) {
         alert("로그인 후 이용 가능합니다.");
+        hideLoading();
         return;
     }
 
@@ -478,5 +500,7 @@ document.getElementById("load_button").addEventListener("click", async () => {
     } catch (error) {
         console.error("불러오기 오류:", error);
         alert("서버와 연결할 수 없습니다.");
+    } finally {
+        hideLoading();
     }
 });

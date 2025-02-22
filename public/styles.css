@@ -41,6 +41,12 @@ header {
   gap: 15px;
 }
 
+.login_menu_after{
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
 main {
   flex: 1;
   display: flex;
@@ -125,11 +131,6 @@ input {
   font-size: large;
 }
 
-.login_menu_after{
-  display: flex;
-  align-items: center; /* 세로 중앙 정렬 */
-}
-
 /* 카테고리 구분선 스타일 */
 .category_row {
   background-color: lavender; /* 파스텔톤 배경 */
@@ -186,6 +187,17 @@ input {
   background-color: #fff;
   width: 30%;
   height: 60%;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.modal_content_x_small {
+  padding: 10px;
+  position: relative;
+  background-color: #fff;
+  width: 10%;
+  height: 10%;
   border-radius: 8px;
   overflow: hidden;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
