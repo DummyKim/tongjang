@@ -237,20 +237,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
 //로그인 기능//
 
-
-//테스트
-document.addEventListener("DOMContentLoaded", () => {
-    const loginForm = document.querySelector("login_form");
-    const registerButton = document.getElementById("register_button");
-
-    console.log("🔹 login_form:", loginForm);
-    console.log("🔹 register_button:", registerButton);
-
-    if (!loginForm) console.error("🚨 [경고] login_form을 찾을 수 없습니다!");
-    if (!registerButton) console.error("🚨 [경고] register_button을 찾을 수 없습니다!");
-});
-
-
 //회원가입
 document.getElementById('reg-btn').addEventListener('click', async () => {
     const username = document.getElementById('reg-username').value.trim();
@@ -311,7 +297,7 @@ window.addEventListener('message', (event) => {
 });
 
 //로그인
-document.querySelector('login_form').addEventListener('submit', async (event) => {
+document.getElementById('submit').addEventListener('submit', async (event) => {
     event.preventDefault(); // 폼 기본 동작 중지
 
     const email = document.getElementById('email').value.trim();
