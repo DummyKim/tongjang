@@ -396,10 +396,8 @@ function showLoggedOutUI() {
 }
 
 document.getElementById('logout_button').addEventListener('click', () => {
-    const confirmLogout = confirm("로그아웃 하시겠습니까?");
-    
-    if (confirmLogout) {
-        localStorage.removeItem('token'); // JWT 삭제
+    if (confirm("로그아웃 하시겠습니까?")) { 
+        localStorage.removeItem('token');
         alert('로그아웃되었습니다.');
         showLoggedOutUI(); // 로그인 전 UI로 전환
     }
